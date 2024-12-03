@@ -1,6 +1,6 @@
-'use client';
-import { useEffect, useState } from 'react';
-import Link from 'next/link';
+"use client";
+import { useEffect, useState } from "react";
+import Link from "next/link";
 import {
   Container,
   Typography,
@@ -10,8 +10,8 @@ import {
   CardContent,
   Box,
   Divider,
-} from '@mui/material';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+} from "@mui/material";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
 export default function PostPage({ params }) {
   const [post, setPost] = useState(null);
@@ -20,14 +20,14 @@ export default function PostPage({ params }) {
 
   useEffect(() => {
     fetch(`/api/entries/${params.id}`)
-      .then(res => res.json())
-      .then(data => {
+      .then((res) => res.json())
+      .then((data) => {
         setPost(data.entry);
         setLoading(false);
       })
-      .catch(error => {
-        console.error('Error:', error);
-        setError('Error al cargar el post');
+      .catch((error) => {
+        console.error("Error:", error);
+        setError("Error al cargar el post");
         setLoading(false);
       });
   }, [params.id]);
@@ -46,13 +46,13 @@ export default function PostPage({ params }) {
       >
         Volver
       </Button>
-      
+
       <Card>
         <CardContent>
           <Typography variant="h4" component="h1" gutterBottom>
             {post.titulo}
           </Typography>
-          
+
           <div
             className="text-gray-600"
             dangerouslySetInnerHTML={{ __html: post.bajada }}
@@ -63,35 +63,29 @@ export default function PostPage({ params }) {
               component="img"
               image={post.img_local}
               alt={post.titulo}
-              sx={{ 
-                maxHeight: 400, 
-                objectFit: 'cover',
+              sx={{
+                maxHeight: 400,
+                objectFit: "cover",
                 my: 3,
-                borderRadius: 1
+                borderRadius: 1,
               }}
             />
           )}
-          
-          <div
-            dangerouslySetInnerHTML={{ __html: post.desarrollo }}
-          />
-          
+
+          <div dangerouslySetInnerHTML={{ __html: post.desarrollo }} />
+
           {post.preguntas && (
             <>
               <Divider sx={{ my: 4 }} />
               <Typography variant="h5" component="h2" gutterBottom>
                 Preguntas
               </Typography>
-              <div
-                dangerouslySetInnerHTML={{ __html: post.preguntas }}
-              />
+              <div dangerouslySetInnerHTML={{ __html: post.preguntas }} />
             </>
           )}
-          
-          <Box sx={{ mt: 3, color: 'text.secondary' }}>
-            <Typography variant="body2">
-              Categoría: {post.categoria}
-            </Typography>
+
+          <Box sx={{ mt: 3, color: "text.secondary" }}>
+            <Typography variant="body2">Categoría: {post.categoria}</Typography>
             <Typography variant="body2">
               Fecha: {new Date(post.created).toLocaleDateString()}
             </Typography>
@@ -100,4 +94,4 @@ export default function PostPage({ params }) {
       </Card>
     </Container>
   );
-} 
+}
