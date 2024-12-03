@@ -1,7 +1,7 @@
 import RootLayoutClient from "./RootLayoutClient";
 
 export const metadata = {
-  title: "MentoIA",
+  title: "MentorIA",
   description: "Contenido educativo creado con Inteligencia Artificial",
 };
 

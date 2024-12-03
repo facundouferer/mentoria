@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState } from "react";
 import {
   AppBar,
   Box,
@@ -11,22 +11,22 @@ import {
   MenuItem,
   InputBase,
   alpha,
-} from '@mui/material';
-import MenuIcon from '@mui/icons-material/Menu';
-import SearchIcon from '@mui/icons-material/Search';
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+} from "@mui/material";
+import MenuIcon from "@mui/icons-material/Menu";
+import SearchIcon from "@mui/icons-material/Search";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 const pages = [
-  { title: 'Inicio', path: '/' },
-  { title: 'FUTURO', path: 'https://futuro.chaco.gob.ar/' },
-  { title: 'ELE', path: 'https://ele.chaco.gob.ar/' },
-  { title: 'CHAT BOT', path: 'https://bot.scyt.gar.com.ar/' },
+  { title: "Inicio", path: "/" },
+  { title: "FUTURO", path: "https://futuro.chaco.gob.ar/" },
+  { title: "ELE", path: "https://ele.chaco.gob.ar/" },
+  { title: "CHAT BOT", path: "https://bot.scyt.gar.com.ar/" },
 ];
 
 export default function Navbar() {
   const [anchorElNav, setAnchorElNav] = useState(null);
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
   const router = useRouter();
 
   const handleOpenNavMenu = (event) => {
@@ -38,8 +38,8 @@ export default function Navbar() {
   };
 
   const handleNavigate = (path) => {
-    if (path.startsWith('http')) {
-      window.open(path, '_blank');
+    if (path.startsWith("http")) {
+      window.open(path, "_blank");
     } else {
       router.push(path);
     }
@@ -47,11 +47,11 @@ export default function Navbar() {
   };
 
   const handleSearch = (e) => {
-    if (e.key === 'Enter') {
+    if (e.key === "Enter") {
       const searchQuery = encodeURIComponent(searchTerm.trim());
       if (searchQuery) {
         router.push(`/?search=${searchQuery}`);
-        setSearchTerm('');
+        setSearchTerm("");
       }
     }
   };
@@ -68,17 +68,17 @@ export default function Navbar() {
             href="/"
             sx={{
               mr: 2,
-              display: { xs: 'none', md: 'flex' },
+              display: { xs: "none", md: "flex" },
               fontWeight: 700,
-              color: 'inherit',
-              textDecoration: 'none',
+              color: "inherit",
+              textDecoration: "none",
             }}
           >
-            MentoIA
+            MentorIA
           </Typography>
 
           {/* Mobile menu */}
-          <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
+          <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
             <IconButton
               size="large"
               aria-label="menu"
@@ -93,23 +93,23 @@ export default function Navbar() {
               id="menu-appbar"
               anchorEl={anchorElNav}
               anchorOrigin={{
-                vertical: 'bottom',
-                horizontal: 'left',
+                vertical: "bottom",
+                horizontal: "left",
               }}
               keepMounted
               transformOrigin={{
-                vertical: 'top',
-                horizontal: 'left',
+                vertical: "top",
+                horizontal: "left",
               }}
               open={Boolean(anchorElNav)}
               onClose={handleCloseNavMenu}
               sx={{
-                display: { xs: 'block', md: 'none' },
+                display: { xs: "block", md: "none" },
               }}
             >
               {pages.map((page) => (
-                <MenuItem 
-                  key={page.path} 
+                <MenuItem
+                  key={page.path}
                   onClick={() => handleNavigate(page.path)}
                 >
                   <Typography textAlign="center">{page.title}</Typography>
@@ -126,23 +126,23 @@ export default function Navbar() {
             href="/"
             sx={{
               mr: 2,
-              display: { xs: 'flex', md: 'none' },
+              display: { xs: "flex", md: "none" },
               flexGrow: 1,
               fontWeight: 700,
-              color: 'inherit',
-              textDecoration: 'none',
+              color: "inherit",
+              textDecoration: "none",
             }}
           >
-            MentoIA
+            MentorIA
           </Typography>
 
           {/* Desktop menu */}
-          <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+          <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
             {pages.map((page) => (
               <Button
                 key={page.path}
                 onClick={() => handleNavigate(page.path)}
-                sx={{ my: 2, color: 'white', display: 'block' }}
+                sx={{ my: 2, color: "white", display: "block" }}
               >
                 {page.title}
               </Button>
@@ -150,21 +150,25 @@ export default function Navbar() {
           </Box>
 
           {/* Search Box */}
-          <Box sx={{ 
-            position: 'relative',
-            backgroundColor: alpha('#fff', 0.15),
-            '&:hover': { backgroundColor: alpha('#fff', 0.25) },
-            borderRadius: 1,
-            marginLeft: 2,
-            width: 'auto',
-          }}>
-            <Box sx={{ 
-              padding: '0 16px',
-              height: '100%',
-              position: 'absolute',
-              display: 'flex',
-              alignItems: 'center',
-            }}>
+          <Box
+            sx={{
+              position: "relative",
+              backgroundColor: alpha("#fff", 0.15),
+              "&:hover": { backgroundColor: alpha("#fff", 0.25) },
+              borderRadius: 1,
+              marginLeft: 2,
+              width: "auto",
+            }}
+          >
+            <Box
+              sx={{
+                padding: "0 16px",
+                height: "100%",
+                position: "absolute",
+                display: "flex",
+                alignItems: "center",
+              }}
+            >
               <SearchIcon />
             </Box>
             <InputBase
@@ -173,13 +177,13 @@ export default function Navbar() {
               onChange={(e) => setSearchTerm(e.target.value)}
               onKeyPress={handleSearch}
               sx={{
-                color: 'inherit',
-                padding: '8px 8px 8px 48px',
-                width: '100%',
-                '& input': {
-                  color: 'inherit',
-                  padding: '4px',
-                  width: '200px',
+                color: "inherit",
+                padding: "8px 8px 8px 48px",
+                width: "100%",
+                "& input": {
+                  color: "inherit",
+                  padding: "4px",
+                  width: "200px",
                 },
               }}
             />
@@ -188,4 +192,4 @@ export default function Navbar() {
       </Container>
     </AppBar>
   );
-} 
+}
