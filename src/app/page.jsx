@@ -30,6 +30,7 @@ export default function Home() {
 
   const fetchEntries = async (page, limit, category = null) => {
     try {
+      setLoading(true);
       const url = new URL('/api/entries', window.location.origin);
       url.searchParams.set('page', page);
       url.searchParams.set('limit', limit);
@@ -51,13 +52,22 @@ export default function Home() {
   };
 
   useEffect(() => {
-    setCurrentPage(1); // Reset page when search changes
+    setCurrentPage(1);
     fetchEntries(1, itemsPerPage, selectedCategory);
   }, [searchParams, itemsPerPage, selectedCategory]);
+
+  useEffect(() => {
+    fetchEntries(currentPage, itemsPerPage, selectedCategory);
+  }, [currentPage]);
 
   const handleCategoryClick = (category) => {
     setSelectedCategory(category);
     setCurrentPage(1);
+  };
+
+  const handlePageChange = (_, page) => {
+    setCurrentPage(page);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   if (loading) return <div>Cargando...</div>;
@@ -177,9 +187,12 @@ export default function Home() {
         <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
           <Pagination
             count={pagination.totalPages}
-            page={pagination.currentPage}
-            onChange={(_, page) => setCurrentPage(page)}
+            page={currentPage}
+            onChange={handlePageChange}
             color="primary"
+            size="large"
+            showFirstButton
+            showLastButton
           />
         </Box>
       )}
