@@ -64,9 +64,6 @@ export default function PostPage({ params }) {
               image={post.img_local}
               alt={post.titulo}
               sx={{
-                maxHeight: 400,
-                objectFit: "cover",
-                my: 3,
                 borderRadius: 1,
               }}
             />
