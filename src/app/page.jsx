@@ -1,7 +1,7 @@
-'use client';
-import { useEffect, useState } from 'react';
-import { useSearchParams } from 'next/navigation';
-import Link from 'next/link';
+"use client";
+import { useEffect, useState } from "react";
+import { useSearchParams } from "next/navigation";
+import Link from "next/link";
 import {
   Container,
   Grid,
@@ -16,7 +16,7 @@ import {
   InputLabel,
   Pagination,
   Box,
-} from '@mui/material';
+} from "@mui/material";
 
 export default function Home() {
   const searchParams = useSearchParams();
@@ -31,13 +31,13 @@ export default function Home() {
   const fetchEntries = async (page, limit, category = null) => {
     try {
       setLoading(true);
-      const url = new URL('/api/entries', window.location.origin);
-      url.searchParams.set('page', page);
-      url.searchParams.set('limit', limit);
-      if (category) url.searchParams.set('category', category);
-      
-      const search = searchParams.get('search');
-      if (search) url.searchParams.set('search', search);
+      const url = new URL("/api/entries", window.location.origin);
+      url.searchParams.set("page", page);
+      url.searchParams.set("limit", limit);
+      if (category) url.searchParams.set("category", category);
+
+      const search = searchParams.get("search");
+      if (search) url.searchParams.set("search", search);
 
       const response = await fetch(url);
       const data = await response.json();
@@ -45,8 +45,8 @@ export default function Home() {
       setPagination(data.pagination);
       setLoading(false);
     } catch (error) {
-      console.error('Error:', error);
-      setError('Error al cargar los datos');
+      console.error("Error:", error);
+      setError("Error al cargar los datos");
       setLoading(false);
     }
   };
@@ -67,7 +67,7 @@ export default function Home() {
 
   const handlePageChange = (_, page) => {
     setCurrentPage(page);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   if (loading) return <div>Cargando...</div>;
@@ -76,13 +76,13 @@ export default function Home() {
     return (
       <Container maxWidth="lg" sx={{ py: 4 }}>
         <Typography variant="h4" component="h1" gutterBottom>
-          {searchParams.get('search') 
-            ? `No hay resultados para "${searchParams.get('search')}"`
-            : 'No hay entradas disponibles'}
+          {searchParams.get("search")
+            ? `No hay resultados para "${searchParams.get("search")}"`
+            : "No hay entradas disponibles"}
         </Typography>
-        {searchParams.get('search') && (
+        {searchParams.get("search") && (
           <Button
-            onClick={() => window.location.href = '/'}
+            onClick={() => (window.location.href = "/")}
             variant="contained"
             sx={{ mt: 2 }}
           >
@@ -96,23 +96,23 @@ export default function Home() {
   return (
     <Container maxWidth="lg" sx={{ py: 4 }}>
       <Typography variant="h4" component="h1" gutterBottom>
-        {searchParams.get('search') 
-          ? `Resultados para "${searchParams.get('search')}"`
-          : selectedCategory 
-            ? `Artículos en ${selectedCategory}` 
-            : 'Entradas del Blog'}
+        {searchParams.get("search")
+          ? `Resultados para "${searchParams.get("search")}"`
+          : selectedCategory
+          ? `Artículos de ${selectedCategory}`
+          : "Artículos"}
       </Typography>
-      
-      {(selectedCategory || searchParams.get('search')) && (
+
+      {(selectedCategory || searchParams.get("search")) && (
         <Button
-          onClick={() => window.location.href = '/'}
+          onClick={() => (window.location.href = "/")}
           startIcon="←"
           sx={{ mb: 2 }}
         >
           Volver a todas las entradas
         </Button>
       )}
-      
+
       <Box sx={{ mb: 3 }}>
         <FormControl sx={{ minWidth: 120 }}>
           <InputLabel>Items por página</InputLabel>
@@ -133,7 +133,7 @@ export default function Home() {
       </Box>
 
       <Grid container spacing={3}>
-        {entries?.map(entry => (
+        {entries?.map((entry) => (
           <Grid item key={entry.id} xs={12} sm={6}>
             <Card>
               {entry.img_local && (
@@ -143,9 +143,9 @@ export default function Home() {
                   image={entry.img_local}
                   alt={entry.titulo}
                   sx={{
-                    transition: 'transform 0.3s',
-                    '&:hover': {
-                      transform: 'scale(1.05)',
+                    transition: "transform 0.3s",
+                    "&:hover": {
+                      transform: "scale(1.05)",
                     },
                   }}
                 />
@@ -157,10 +157,10 @@ export default function Home() {
                   component={Link}
                   href={`/post/${entry.id}`}
                   sx={{
-                    textDecoration: 'none',
-                    color: 'inherit',
-                    '&:hover': {
-                      color: 'primary.main',
+                    textDecoration: "none",
+                    color: "inherit",
+                    "&:hover": {
+                      color: "primary.main",
                     },
                   }}
                 >
@@ -184,7 +184,7 @@ export default function Home() {
       </Grid>
 
       {pagination && (
-        <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
+        <Box sx={{ display: "flex", justifyContent: "center", mt: 4 }}>
           <Pagination
             count={pagination.totalPages}
             page={currentPage}
