@@ -1,4 +1,4 @@
-'use client';
+"use client";
 import { useState } from "react";
 import {
   AppBar,
@@ -17,7 +17,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import SearchIcon from "@mui/icons-material/Search";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import ThemeToggle from './ThemeToggle';
+import ThemeToggle from "./ThemeToggle";
 
 const pages = [
   { title: "Inicio", path: "/" },
@@ -59,9 +59,21 @@ export default function Navbar({ mode, toggleColorMode }) {
   };
 
   return (
-    <AppBar position="sticky">
-      <Container maxWidth="xl">
-        <Toolbar disableGutters>
+    <AppBar
+      position="sticky"
+      sx={{
+        height: 81,
+      }}
+    >
+      <Container maxWidth="xl" sx={{ height: "100%" }}>
+        <Toolbar
+          disableGutters
+          sx={{
+            height: "100%", // Full height to match the AppBar
+            display: "flex", // Ensure it's a flex container
+            alignItems: "center", // Center items vertically
+          }}
+        >
           {/* Logo/Title - Desktop */}
           <Typography
             variant="h6"
@@ -139,7 +151,7 @@ export default function Navbar({ mode, toggleColorMode }) {
           </Typography>
 
           {/* Desktop menu */}
-          <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
+          <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" }, alignItems: "center" }}>
             {pages.map((page) => (
               <Button
                 key={page.path}
