@@ -165,6 +165,8 @@ export default function Home() {
               sx={{ height: "100%", display: "flex", flexDirection: "column" }}
             >
               {entry.img_local && (
+                // Para que sea clickeable la imagen
+                 <Link href={`/post/${entry.id}`} passHref>
                 <CardMedia
                   component="img"
                   height="200"
@@ -177,6 +179,8 @@ export default function Home() {
                     },
                   }}
                 />
+                </Link>
+                
               )}
               <CardContent sx={{ flexGrow: 1 }}>
                 <Typography
