@@ -1,6 +1,6 @@
 "use client";
-import { useEffect, useState } from "react";
-import { useSearchParams } from "next/navigation";
+import { useEffect, useState, useCallback, Suspense } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import {
   Container,
@@ -21,7 +21,8 @@ import {
 } from "@mui/material";
 import Footer from "../components/Footer";
 
-export default function Home() {
+function HomeContent() {
+  const router = useRouter();
   const searchParams = useSearchParams();
   const [entries, setEntries] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -31,18 +32,27 @@ export default function Home() {
   const [itemsPerPage, setItemsPerPage] = useState(12);
   const [selectedCategory, setSelectedCategory] = useState(null);
 
-  const fetchEntries = async (page, limit, category = null) => {
+  const createQueryString = useCallback(
+    (name, value) => {
+      const params = new URLSearchParams(searchParams);
+      params.set(name, value);
+      return params.toString();
+    },
+    [searchParams]
+  );
+
+  const fetchEntries = useCallback(async (page, limit, category = null) => {
     try {
       setLoading(true);
-      const url = new URL("/api/entries", window.location.origin);
-      url.searchParams.set("page", page);
-      url.searchParams.set("limit", limit);
-      if (category) url.searchParams.set("category", category);
-
+      const params = new URLSearchParams();
+      params.set("page", page);
+      params.set("limit", limit);
+      if (category) params.set("category", category);
+      
       const search = searchParams.get("search");
-      if (search) url.searchParams.set("search", search);
+      if (search) params.set("search", search);
 
-      const response = await fetch(url);
+      const response = await fetch(`/api/entries?${params.toString()}`);
       const data = await response.json();
       setEntries(data.entries || []);
       setPagination(data.pagination);
@@ -52,24 +62,26 @@ export default function Home() {
       setError("Error al cargar los datos");
       setLoading(false);
     }
-  };
+  }, [searchParams]);
 
   useEffect(() => {
     setCurrentPage(1);
     fetchEntries(1, itemsPerPage, selectedCategory);
-  }, [searchParams, itemsPerPage, selectedCategory]);
+  }, [searchParams, itemsPerPage, selectedCategory, fetchEntries]);
 
   useEffect(() => {
     fetchEntries(currentPage, itemsPerPage, selectedCategory);
-  }, [currentPage]);
+  }, [currentPage, fetchEntries, itemsPerPage, selectedCategory]);
 
   const handleCategoryClick = (category) => {
     setSelectedCategory(category);
     setCurrentPage(1);
+    router.push(`/?category=${category}`);
   };
 
   const handlePageChange = (_, page) => {
     setCurrentPage(page);
+    router.push(`/?${createQueryString("page", page)}`);
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
@@ -259,5 +271,17 @@ export default function Home() {
       </Container>
       <Footer />
     </>
+  );
+}
+
+export default function Home() {
+  return (
+    <Suspense fallback={
+      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+        <CircularProgress size={60} />
+      </Box>
+    }>
+      <HomeContent />
+    </Suspense>
   );
 }
