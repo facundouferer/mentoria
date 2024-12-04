@@ -10,6 +10,7 @@ import {
   CardContent,
   Box,
   Divider,
+  CircularProgress
 } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
@@ -32,7 +33,18 @@ export default function PostPage({ params }) {
       });
   }, [params.id]);
 
-  if (loading) return <div>Cargando...</div>;
+  if (loading) return (
+    <Box
+      sx={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        height: "100vh", 
+      }}
+    >
+      <CircularProgress size={60} />
+    </Box>
+  );
   if (error) return <div>{error}</div>;
   if (!post) return <div>Post no encontrado</div>;
 

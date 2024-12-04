@@ -16,6 +16,7 @@ import {
   InputLabel,
   Pagination,
   Box,
+  CircularProgress
 } from "@mui/material";
 
 export default function Home() {
@@ -70,7 +71,21 @@ export default function Home() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  if (loading) return <div>Cargando...</div>;
+  // Círculo de carga
+  if (loading) return (
+    <Box
+      sx={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        height: "100vh", 
+      }}
+    >
+      <CircularProgress size={60} />
+    </Box>
+  );
+
+
   if (error) return <div>{error}</div>;
   if (!entries || entries.length === 0) {
     return (
