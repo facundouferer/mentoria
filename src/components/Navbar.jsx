@@ -21,7 +21,7 @@ const pages = [
   { title: "Inicio", path: "/" },
   { title: "FUTURO", path: "https://futuro.chaco.gob.ar/" },
   { title: "ELE", path: "https://ele.chaco.gob.ar/" },
-  { title: "CHAT BOT", path: "https://bot.scyt.gar.com.ar/" },
+  { title: "CHATBOT", path: "https://bot.scyt.gar.com.ar/" },
 ];
 
 export default function Navbar() {

@@ -17,6 +17,7 @@ import {
   Pagination,
   Box,
 } from "@mui/material";
+import Footer from "../components/Footer";
 
 export default function Home() {
   const searchParams = useSearchParams();
@@ -94,108 +95,111 @@ export default function Home() {
   }
 
   return (
-    <Container maxWidth="lg" sx={{ py: 4 }}>
-      <Typography variant="h4" component="h1" gutterBottom>
-        {searchParams.get("search")
-          ? `Resultados para "${searchParams.get("search")}"`
-          : selectedCategory
-          ? `Artículos de ${selectedCategory}`
-          : "Artículos"}
-      </Typography>
+    <>
+      <Container maxWidth="lg" sx={{ py: 4 }}>
+        <Typography variant="h4" component="h1" gutterBottom>
+          {searchParams.get("search")
+            ? `Resultados para "${searchParams.get("search")}"`
+            : selectedCategory
+            ? `Artículos de ${selectedCategory}`
+            : "Artículos"}
+        </Typography>
 
-      {(selectedCategory || searchParams.get("search")) && (
-        <Button
-          onClick={() => (window.location.href = "/")}
-          startIcon="←"
-          sx={{ mb: 2 }}
-        >
-          Volver a todas las entradas
-        </Button>
-      )}
-
-      <Box sx={{ mb: 3 }}>
-        <FormControl sx={{ minWidth: 120 }}>
-          <InputLabel>Items por página</InputLabel>
-          <Select
-            value={itemsPerPage}
-            label="Items por página"
-            onChange={(e) => {
-              setItemsPerPage(Number(e.target.value));
-              setCurrentPage(1);
-            }}
+        {(selectedCategory || searchParams.get("search")) && (
+          <Button
+            onClick={() => (window.location.href = "/")}
+            startIcon="←"
+            sx={{ mb: 2 }}
           >
-            <MenuItem value={4}>4 por página</MenuItem>
-            <MenuItem value={6}>6 por página</MenuItem>
-            <MenuItem value={8}>8 por página</MenuItem>
-            <MenuItem value={10}>10 por página</MenuItem>
-          </Select>
-        </FormControl>
-      </Box>
+            Volver a todas las entradas
+          </Button>
+        )}
 
-      <Grid container spacing={3}>
-        {entries?.map((entry) => (
-          <Grid item key={entry.id} xs={12} sm={6}>
-            <Card>
-              {entry.img_local && (
-                <CardMedia
-                  component="img"
-                  height="200"
-                  image={entry.img_local}
-                  alt={entry.titulo}
-                  sx={{
-                    transition: "transform 0.3s",
-                    "&:hover": {
-                      transform: "scale(1.05)",
-                    },
-                  }}
-                />
-              )}
-              <CardContent>
-                <Typography
-                  gutterBottom
-                  variant="h5"
-                  component={Link}
-                  href={`/post/${entry.id}`}
-                  sx={{
-                    textDecoration: "none",
-                    color: "inherit",
-                    "&:hover": {
-                      color: "primary.main",
-                    },
-                  }}
-                >
-                  {entry.titulo}
-                </Typography>
-                <div
-                  className="text-gray-600 mb-3"
-                  dangerouslySetInnerHTML={{ __html: entry.bajada }}
-                />
-                <Button
-                  size="small"
-                  onClick={() => handleCategoryClick(entry.categoria)}
-                  sx={{ mt: 1 }}
-                >
-                  Categoría: {entry.categoria}
-                </Button>
-              </CardContent>
-            </Card>
-          </Grid>
-        ))}
-      </Grid>
-
-      {pagination && (
-        <Box sx={{ display: "flex", justifyContent: "center", mt: 4 }}>
-          <Pagination
-            count={pagination.totalPages}
-            page={currentPage}
-            onChange={handlePageChange}
-            color="primary"
-            size="large"
-            showFirstButton
-            showLastButton
-          />
+        <Box sx={{ mb: 3 }}>
+          <FormControl sx={{ minWidth: 120 }}>
+            <InputLabel>Items por página</InputLabel>
+            <Select
+              value={itemsPerPage}
+              label="Items por página"
+              onChange={(e) => {
+                setItemsPerPage(Number(e.target.value));
+                setCurrentPage(1);
+              }}
+            >
+              <MenuItem value={4}>4 por página</MenuItem>
+              <MenuItem value={6}>6 por página</MenuItem>
+              <MenuItem value={8}>8 por página</MenuItem>
+              <MenuItem value={10}>10 por página</MenuItem>
+            </Select>
+          </FormControl>
         </Box>
-      )}
-    </Container>
+
+        <Grid container spacing={3}>
+          {entries?.map((entry) => (
+            <Grid item key={entry.id} xs={12} sm={6}>
+              <Card>
+                {entry.img_local && (
+                  <CardMedia
+                    component="img"
+                    height="200"
+                    image={entry.img_local}
+                    alt={entry.titulo}
+                    sx={{
+                      transition: "transform 0.3s",
+                      "&:hover": {
+                        transform: "scale(1.05)",
+                      },
+                    }}
+                  />
+                )}
+                <CardContent>
+                  <Typography
+                    gutterBottom
+                    variant="h5"
+                    component={Link}
+                    href={`/post/${entry.id}`}
+                    sx={{
+                      textDecoration: "none",
+                      color: "inherit",
+                      "&:hover": {
+                        color: "primary.main",
+                      },
+                    }}
+                  >
+                    {entry.titulo}
+                  </Typography>
+                  <div
+                    className="text-gray-600 mb-3"
+                    dangerouslySetInnerHTML={{ __html: entry.bajada }}
+                  />
+                  <Button
+                    size="small"
+                    onClick={() => handleCategoryClick(entry.categoria)}
+                    sx={{ mt: 1 }}
+                  >
+                    Categoría: {entry.categoria}
+                  </Button>
+                </CardContent>
+              </Card>
+            </Grid>
+          ))}
+        </Grid>
+
+        {pagination && (
+          <Box sx={{ display: "flex", justifyContent: "center", mt: 4 }}>
+            <Pagination
+              count={pagination.totalPages}
+              page={currentPage}
+              onChange={handlePageChange}
+              color="primary"
+              size="large"
+              showFirstButton
+              showLastButton
+            />
+          </Box>
+        )}
+      </Container>
+      <Footer />
+    </>
   );
 }
