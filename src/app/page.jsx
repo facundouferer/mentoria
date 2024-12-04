@@ -19,6 +19,7 @@ import {
   Box,
   CircularProgress,
 } from "@mui/material";
+import Footer from "../components/Footer";
 
 export default function Home() {
   const searchParams = useSearchParams();
@@ -116,24 +117,25 @@ export default function Home() {
   }
 
   return (
-    <Container maxWidth="lg" sx={{ py: 4 }}>
-      <Typography variant="h4" component="h1" gutterBottom>
-        {searchParams.get("search")
-          ? `Resultados para "${searchParams.get("search")}"`
-          : selectedCategory
-          ? `Artículos de ${selectedCategory}`
-          : "Artículos"}
-      </Typography>
+    <>
+      <Container maxWidth="lg" sx={{ py: 4 }}>
+        <Typography variant="h4" component="h1" gutterBottom>
+          {searchParams.get("search")
+            ? `Resultados para "${searchParams.get("search")}"`
+            : selectedCategory
+            ? `Artículos de ${selectedCategory}`
+            : "Artículos"}
+        </Typography>
 
-      {(selectedCategory || searchParams.get("search")) && (
-        <Button
-          onClick={() => (window.location.href = "/")}
-          startIcon="←"
-          sx={{ mb: 2 }}
-        >
-          Volver a todas las entradas
-        </Button>
-      )}
+        {(selectedCategory || searchParams.get("search")) && (
+          <Button
+            onClick={() => (window.location.href = "/")}
+            startIcon="←"
+            sx={{ mb: 2 }}
+          >
+            Volver a todas las entradas
+          </Button>
+        )}
 
       <Box sx={{ mb: 3 }}>
         <FormControl sx={{ minWidth: 120 }}>
@@ -241,19 +243,21 @@ export default function Home() {
         ))}
       </Grid>
 
-      {pagination && (
-        <Box sx={{ display: "flex", justifyContent: "center", mt: 4 }}>
-          <Pagination
-            count={pagination.totalPages}
-            page={currentPage}
-            onChange={handlePageChange}
-            color="primary"
-            size="large"
-            showFirstButton
-            showLastButton
-          />
-        </Box>
-      )}
-    </Container>
+        {pagination && (
+          <Box sx={{ display: "flex", justifyContent: "center", mt: 4 }}>
+            <Pagination
+              count={pagination.totalPages}
+              page={currentPage}
+              onChange={handlePageChange}
+              color="primary"
+              size="large"
+              showFirstButton
+              showLastButton
+            />
+          </Box>
+        )}
+      </Container>
+      <Footer />
+    </>
   );
 }
