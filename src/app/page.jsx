@@ -7,6 +7,7 @@ import {
   Grid,
   Card,
   CardMedia,
+  CardActions,
   CardContent,
   Typography,
   Button,
@@ -16,7 +17,7 @@ import {
   InputLabel,
   Pagination,
   Box,
-  CircularProgress
+  CircularProgress,
 } from "@mui/material";
 
 export default function Home() {
@@ -26,7 +27,7 @@ export default function Home() {
   const [error, setError] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [pagination, setPagination] = useState(null);
-  const [itemsPerPage, setItemsPerPage] = useState(10);
+  const [itemsPerPage, setItemsPerPage] = useState(12);
   const [selectedCategory, setSelectedCategory] = useState(null);
 
   const fetchEntries = async (page, limit, category = null) => {
@@ -71,20 +72,26 @@ export default function Home() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  // Círculo de carga
-  if (loading) return (
-    <Box
-      sx={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        height: "100vh", 
-      }}
-    >
-      <CircularProgress size={60} />
-    </Box>
-  );
+  // Función para extraer el texto de un HTML sin los tags
+  const stripHtml = (html) => {
+    const doc = new DOMParser().parseFromString(html, "text/html");
+    return doc.body.textContent || "";
+  };
 
+  // Círculo de carga
+  if (loading)
+    return (
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh",
+        }}
+      >
+        <CircularProgress size={60} />
+      </Box>
+    );
 
   if (error) return <div>{error}</div>;
   if (!entries || entries.length === 0) {
@@ -139,18 +146,22 @@ export default function Home() {
               setCurrentPage(1);
             }}
           >
-            <MenuItem value={4}>4 por página</MenuItem>
+            {/* Múltiplo de 3 ya que se muestran tres columnas */}
+            <MenuItem value={3}>3 por página</MenuItem>
             <MenuItem value={6}>6 por página</MenuItem>
-            <MenuItem value={8}>8 por página</MenuItem>
-            <MenuItem value={10}>10 por página</MenuItem>
+            <MenuItem value={9}>9 por página</MenuItem>
+            <MenuItem value={12}>12 por página</MenuItem>
           </Select>
         </FormControl>
       </Box>
 
+      {/* Media Card */}
       <Grid container spacing={3}>
         {entries?.map((entry) => (
-          <Grid item key={entry.id} xs={12} sm={6}>
-            <Card>
+          <Grid item key={entry.id} xs={12} sm={6} md={4}>
+            <Card
+              sx={{ height: "100%", display: "flex", flexDirection: "column" }}
+            >
               {entry.img_local && (
                 <CardMedia
                   component="img"
@@ -165,12 +176,11 @@ export default function Home() {
                   }}
                 />
               )}
-              <CardContent>
+              <CardContent sx={{ flexGrow: 1 }}>
                 <Typography
                   gutterBottom
                   variant="h5"
-                  component={Link}
-                  href={`/post/${entry.id}`}
+                  component="div"
                   sx={{
                     textDecoration: "none",
                     color: "inherit",
@@ -179,20 +189,53 @@ export default function Home() {
                     },
                   }}
                 >
-                  {entry.titulo}
+                  <Link
+                    href={`/post/${entry.id}`}
+                    style={{ textDecoration: "none", color: "inherit" }}
+                  >
+                    {entry.titulo}
+                  </Link>
                 </Typography>
-                <div
-                  className="text-gray-600 mb-3"
-                  dangerouslySetInnerHTML={{ __html: entry.bajada }}
-                />
+                <Typography variant="body2" color="text.secondary">
+                  {stripHtml(entry.bajada).substring(0, 300)}
+                  ...
+                </Typography>
+              </CardContent>
+              <CardActions
+                sx={{
+                  justifyContent: "space-between", // Spread the buttons
+                  alignItems: "center", // Align items vertically centered
+                }}
+              >
                 <Button
                   size="small"
                   onClick={() => handleCategoryClick(entry.categoria)}
-                  sx={{ mt: 1 }}
+                  sx={{
+                    width: "250px", // Set fixed width
+                    height: "40px", // Set fixed height
+                    fontSize: "0.875rem", // Smaller font size
+                    textAlign: "left", // Align text to the left
+                    justifyContent: "flex-start", // Ensures text aligns left in a flex container
+                  }}
                 >
-                  Categoría: {entry.categoria}
+                  {entry.categoria}
                 </Button>
-              </CardContent>
+                <Button
+                  size="small"
+                  variant="contained"
+                  component={Link}
+                  href={`/post/${entry.id}`}
+                  sx={{
+                    width: "95px", // Set fixed width
+                    height: "40px", // Set fixed height
+                    textAlign: "center", // Ensure text is centered
+                    fontWeight: "bold", // Make text bold
+                    ml: "auto", // Push to the right
+                  }}
+                >
+                  Leer más
+                </Button>
+              </CardActions>
             </Card>
           </Grid>
         ))}
