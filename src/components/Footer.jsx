@@ -1,11 +1,12 @@
-import { Container, Grid, Box, Link, Typography } from "@mui/material";
+import { Container, Grid, Box, Link, Typography, useTheme } from "@mui/material";
 import Image from "next/image";
 
 export default function Footer() {
+  const theme = useTheme();
   return (
     <Box
       component="footer"
-      sx={{ bgcolor: "primary.main", color: "white", py: 4, mt: "auto" }}
+      sx={{ bgcolor: theme.palette.mode === "dark" ? "#272727" : "primary.main", color: "white", py: 4, mt: "auto" }}
     >
       <Container maxWidth="lg">
         <Grid container spacing={4}>
