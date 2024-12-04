@@ -1,13 +1,10 @@
 import RootLayoutClient from "./RootLayoutClient";
 
 export const metadata = {
-  title: "MentorIA",
+  title: "TutorIA",
   description: "Contenido educativo creado con Inteligencia Artificial",
 };
 
 export default function RootLayout({ children }) {
-
-  return (
-      <RootLayoutClient>{children}</RootLayoutClient>
-  );
+  return <RootLayoutClient>{children}</RootLayoutClient>;
 }

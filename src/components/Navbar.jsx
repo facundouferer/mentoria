@@ -88,7 +88,7 @@ export default function Navbar({ mode, toggleColorMode }) {
               textDecoration: "none",
             }}
           >
-            MentorIA
+            TutorIA
           </Typography>
 
           {/* Mobile menu */}
@@ -147,11 +147,17 @@ export default function Navbar({ mode, toggleColorMode }) {
               textDecoration: "none",
             }}
           >
-            MentorIA
+            TutorIA
           </Typography>
 
           {/* Desktop menu */}
-          <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" }, alignItems: "center" }}>
+          <Box
+            sx={{
+              flexGrow: 1,
+              display: { xs: "none", md: "flex" },
+              alignItems: "center",
+            }}
+          >
             {pages.map((page) => (
               <Button
                 key={page.path}
