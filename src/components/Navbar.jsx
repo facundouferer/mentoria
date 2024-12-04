@@ -1,3 +1,4 @@
+'use client';
 import { useState } from "react";
 import {
   AppBar,
@@ -16,6 +17,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import SearchIcon from "@mui/icons-material/Search";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import ThemeToggle from './ThemeToggle';
 
 const pages = [
   { title: "Inicio", path: "/" },
@@ -24,7 +26,7 @@ const pages = [
   { title: "CHAT BOT", path: "https://bot.scyt.gar.com.ar/" },
 ];
 
-export default function Navbar() {
+export default function Navbar({ mode, toggleColorMode }) {
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const router = useRouter();
@@ -188,6 +190,9 @@ export default function Navbar() {
               }}
             />
           </Box>
+
+          {/* Theme Toggle */}
+          <ThemeToggle mode={mode} toggleColorMode={toggleColorMode} />
         </Toolbar>
       </Container>
     </AppBar>
