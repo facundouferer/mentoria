@@ -19,7 +19,7 @@ import {
   Box,
   CircularProgress,
 } from "@mui/material";
-import Footer from "../components/Footer";
+// import Footer from "../components/Footer";
 
 function HomeContent() {
   const router = useRouter();

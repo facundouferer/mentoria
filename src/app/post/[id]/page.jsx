@@ -16,7 +16,7 @@ import {
 } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import FlagIcon from "@mui/icons-material/Flag";
-import Footer from "@/components/ui/Footer";
+// import Footer from "@/components/ui/Footer";
 
 export default function PostPage({ params }) {
   const [post, setPost] = useState(null);
