@@ -9,59 +9,62 @@ export async function GET(request) {
     const page = parseInt(searchParams.get('page')) || 1;
     const limit = parseInt(searchParams.get('limit')) || 12;
     const offset = (page - 1) * limit;
-    const category = searchParams.get('category');
     const search = searchParams.get('search');
+    const category = searchParams.get('category');
 
-    // Primero, obtener el total de registros
+    let query = 'SELECT * FROM entries WHERE 1=1';
     let countQuery = 'SELECT COUNT(*) as total FROM entries WHERE 1=1';
+    const params = [];
     const countParams = [];
 
     if (category) {
-      countQuery += ' AND category = ?';
+      query += ' AND categoria = ?';
+      countQuery += ' AND categoria = ?';
+      params.push(category);
       countParams.push(category);
     }
 
     if (search) {
-      countQuery += ' AND title LIKE ?';
-      countParams.push(`%${search}%`);
-    }
-
-    // Consulta para obtener los registros paginados
-    let query = 'SELECT * FROM entries WHERE 1=1';
-    const params = [];
-
-    if (category) {
-      query += ' AND category = ?';
-      params.push(category);
-    }
-
-    if (search) {
-      query += ' AND title LIKE ?';
-      params.push(`%${search}%`);
+      const searchTerm = `%${search}%`;
+      query += ' AND (titulo LIKE ? OR bajada LIKE ? OR desarrollo LIKE ?)';
+      countQuery += ' AND (titulo LIKE ? OR bajada LIKE ? OR desarrollo LIKE ?)';
+      params.push(searchTerm, searchTerm, searchTerm);
+      countParams.push(searchTerm, searchTerm, searchTerm);
     }
 
     query += ' ORDER BY id DESC LIMIT ? OFFSET ?';
     params.push(limit, offset);
 
-    // Ejecutar ambas consultas
     const [totalRows] = await pool.execute(countQuery, countParams);
     const [entries] = await pool.execute(query, params);
-
-    const total = totalRows[0].total;
 
     return NextResponse.json({
       entries,
       pagination: {
         currentPage: page,
-        totalPages: Math.ceil(total / limit),
-        totalItems: total
+        totalPages: Math.ceil(totalRows[0].total / limit),
+        totalItems: totalRows[0].total
+      },
+      debug: {
+        query,
+        params,
+        category,
+        searchTerm: search
       }
     });
 
   } catch (error) {
-    console.error('Error en la ruta API:', error);
+    console.error('Error completo:', error);
     return NextResponse.json(
-      { error: 'Error al obtener los datos' },
+      { 
+        error: 'Error en la consulta de la base de datos',
+        details: error.message,
+        fullError: error.toString(),
+        debug: {
+          query: error.query,
+          params: error.params
+        }
+      },
       { status: 500 }
     );
   }
