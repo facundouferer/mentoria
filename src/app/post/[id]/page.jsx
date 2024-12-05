@@ -11,14 +11,22 @@ import {
   Box,
   Divider,
   CircularProgress,
+  Snackbar,
+  Alert,
 } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import Footer from "@/components/Footer";
+import FlagIcon from "@mui/icons-material/Flag";
+import Footer from "@/components/ui/Footer";
 
 export default function PostPage({ params }) {
   const [post, setPost] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: "",
+    severity: "success",
+  });
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -34,6 +42,42 @@ export default function PostPage({ params }) {
         setLoading(false);
       });
   }, [params.id]);
+
+  // Reporte de artículo
+  const handleReport = async () => {
+    try {
+      const response = await fetch("/api/report", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          title: post.titulo,
+          id: params.id,
+          url: window.location.href,
+        }),
+      });
+
+      if (!response.ok) throw new Error("Error al enviar el reporte");
+
+      setSnackbar({
+        open: true,
+        message: "Artículo reportado correctamente",
+        severity: "success",
+      });
+    } catch (error) {
+      console.error("Error:", error);
+      setSnackbar({
+        open: true,
+        message: "Error al enviar el reporte",
+        severity: "error",
+      });
+    }
+  };
+
+  const handleCloseSnackbar = () => {
+    setSnackbar({ ...snackbar, open: false });
+  };
 
   if (loading)
     return (
@@ -54,14 +98,23 @@ export default function PostPage({ params }) {
   return (
     <>
       <Container maxWidth="lg" sx={{ py: 4 }}>
-        <Button
-          component={Link}
-          href="/"
-          startIcon={<ArrowBackIcon />}
-          sx={{ mb: 4 }}
-        >
-          Volver
-        </Button>
+        <Box sx={{ display: "flex", justifyContent: "space-between", mb: 4 }}>
+          <Button
+            component={Link}
+            href="/"
+            startIcon={<ArrowBackIcon />}
+          >
+            Volver
+          </Button>
+          <Button
+            startIcon={<FlagIcon />}
+            onClick={handleReport}
+            color="warning"
+            variant="outlined"
+          >
+            Reportar artículo
+          </Button>
+        </Box>
 
         <Card>
           <CardContent>
@@ -109,6 +162,21 @@ export default function PostPage({ params }) {
         </Card>
       </Container>
       <Footer />
+      
+      <Snackbar
+        open={snackbar.open}
+        autoHideDuration={6000}
+        onClose={handleCloseSnackbar}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+      >
+        <Alert
+          onClose={handleCloseSnackbar}
+          severity={snackbar.severity}
+          sx={{ width: "100%" }}
+        >
+          {snackbar.message}
+        </Alert>
+      </Snackbar>
     </>
   );
 }
