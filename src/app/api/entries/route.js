@@ -40,13 +40,13 @@ export async function GET(request) {
       params.push(`%${search}%`);
     }
 
-    query += ' LIMIT ? OFFSET ?';
+    query += ' ORDER BY id DESC LIMIT ? OFFSET ?';
     params.push(limit, offset);
 
     // Ejecutar ambas consultas
     const [totalRows] = await pool.execute(countQuery, countParams);
     const [entries] = await pool.execute(query, params);
-    
+
     const total = totalRows[0].total;
 
     return NextResponse.json({
@@ -61,7 +61,7 @@ export async function GET(request) {
   } catch (error) {
     console.error('Error en la ruta API:', error);
     return NextResponse.json(
-      { error: 'Error al obtener los datos' }, 
+      { error: 'Error al obtener los datos' },
       { status: 500 }
     );
   }
