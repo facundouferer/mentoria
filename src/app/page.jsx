@@ -41,28 +41,31 @@ function HomeContent() {
     [searchParams]
   );
 
-  const fetchEntries = useCallback(async (page, limit, category = null) => {
-    try {
-      setLoading(true);
-      const params = new URLSearchParams();
-      params.set("page", page);
-      params.set("limit", limit);
-      if (category) params.set("category", category);
-      
-      const search = searchParams.get("search");
-      if (search) params.set("search", search);
+  const fetchEntries = useCallback(
+    async (page, limit, category = null) => {
+      try {
+        setLoading(true);
+        const params = new URLSearchParams();
+        params.set("page", page);
+        params.set("limit", limit);
+        if (category) params.set("category", category);
 
-      const response = await fetch(`/api/entries?${params.toString()}`);
-      const data = await response.json();
-      setEntries(data.entries || []);
-      setPagination(data.pagination);
-      setLoading(false);
-    } catch (error) {
-      console.error("Error:", error);
-      setError("Error al cargar los datos");
-      setLoading(false);
-    }
-  }, [searchParams]);
+        const search = searchParams.get("search");
+        if (search) params.set("search", search);
+
+        const response = await fetch(`/api/entries?${params.toString()}`);
+        const data = await response.json();
+        setEntries(data.entries || []);
+        setPagination(data.pagination);
+        setLoading(false);
+      } catch (error) {
+        console.error("Error:", error);
+        setError("Error al cargar los datos");
+        setLoading(false);
+      }
+    },
+    [searchParams]
+  );
 
   useEffect(() => {
     setCurrentPage(1);
@@ -149,111 +152,115 @@ function HomeContent() {
           </Button>
         )}
 
-      <Box sx={{ mb: 3 }}>
-        <FormControl sx={{ minWidth: 120 }}>
-          <InputLabel>Items por página</InputLabel>
-          <Select
-            value={itemsPerPage}
-            label="Items por página"
-            onChange={(e) => {
-              setItemsPerPage(Number(e.target.value));
-              setCurrentPage(1);
-            }}
-          >
-            {/* Múltiplo de 3 ya que se muestran tres columnas */}
-            <MenuItem value={3}>3 por página</MenuItem>
-            <MenuItem value={6}>6 por página</MenuItem>
-            <MenuItem value={9}>9 por página</MenuItem>
-            <MenuItem value={12}>12 por página</MenuItem>
-          </Select>
-        </FormControl>
-      </Box>
-
-      {/* Media Card */}
-      <Grid container spacing={3}>
-        {entries?.map((entry) => (
-          <Grid item key={entry.id} xs={12} sm={6} md={4}>
-            <Card
-              sx={{ height: "100%", display: "flex", flexDirection: "column" }}
+        <Box sx={{ mb: 3 }}>
+          <FormControl sx={{ minWidth: 120 }}>
+            <InputLabel>Items por página</InputLabel>
+            <Select
+              value={itemsPerPage}
+              label="Items por página"
+              onChange={(e) => {
+                setItemsPerPage(Number(e.target.value));
+                setCurrentPage(1);
+              }}
             >
-              {entry.img_local && (
-                <CardMedia
-                  component="img"
-                  height="200"
-                  image={entry.img_local}
-                  alt={entry.titulo}
-                  sx={{
-                    transition: "transform 0.3s",
-                    "&:hover": {
-                      transform: "scale(1.05)",
-                    },
-                  }}
-                />
-              )}
-              <CardContent sx={{ flexGrow: 1 }}>
-                <Typography
-                  gutterBottom
-                  variant="h5"
-                  component="div"
-                  sx={{
-                    textDecoration: "none",
-                    color: "inherit",
-                    "&:hover": {
-                      color: "primary.main",
-                    },
-                  }}
-                >
-                  <Link
-                    href={`/post/${entry.id}`}
-                    style={{ textDecoration: "none", color: "inherit" }}
-                  >
-                    {entry.titulo}
-                  </Link>
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  {stripHtml(entry.bajada).substring(0, 300)}
-                  ...
-                </Typography>
-              </CardContent>
-              <CardActions
+              {/* Múltiplo de 3 ya que se muestran tres columnas */}
+              <MenuItem value={3}>3 por página</MenuItem>
+              <MenuItem value={6}>6 por página</MenuItem>
+              <MenuItem value={9}>9 por página</MenuItem>
+              <MenuItem value={12}>12 por página</MenuItem>
+            </Select>
+          </FormControl>
+        </Box>
+
+        {/* Media Card */}
+        <Grid container spacing={3}>
+          {entries?.map((entry) => (
+            <Grid item key={entry.id} xs={12} sm={6} md={4}>
+              <Card
                 sx={{
-                  justifyContent: "space-between", // Spread the buttons
-                  alignItems: "center", // Align items vertically centered
+                  height: "100%",
+                  display: "flex",
+                  flexDirection: "column",
                 }}
               >
-                <Button
-                  size="small"
-                  onClick={() => handleCategoryClick(entry.categoria)}
+                {entry.img_local && (
+                  <CardMedia
+                    component="img"
+                    height="200"
+                    image={entry.img_local}
+                    alt={entry.titulo}
+                    sx={{
+                      transition: "transform 0.3s",
+                      "&:hover": {
+                        transform: "scale(1.05)",
+                      },
+                    }}
+                  />
+                )}
+                <CardContent sx={{ flexGrow: 1 }}>
+                  <Typography
+                    gutterBottom
+                    variant="h5"
+                    component="div"
+                    sx={{
+                      textDecoration: "none",
+                      color: "inherit",
+                      "&:hover": {
+                        color: "primary.main",
+                      },
+                    }}
+                  >
+                    <Link
+                      href={`/post/${entry.id}`}
+                      style={{ textDecoration: "none", color: "inherit" }}
+                    >
+                      {entry.titulo}
+                    </Link>
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    {stripHtml(entry.bajada).substring(0, 300)}
+                    ...
+                  </Typography>
+                </CardContent>
+                <CardActions
                   sx={{
-                    width: "250px", // Set fixed width
-                    height: "40px", // Set fixed height
-                    fontSize: "0.875rem", // Smaller font size
-                    textAlign: "left", // Align text to the left
-                    justifyContent: "flex-start", // Ensures text aligns left in a flex container
+                    justifyContent: "space-between", // Spread the buttons
+                    alignItems: "center", // Align items vertically centered
                   }}
                 >
-                  {entry.categoria}
-                </Button>
-                <Button
-                  size="small"
-                  variant="contained"
-                  component={Link}
-                  href={`/post/${entry.id}`}
-                  sx={{
-                    width: "95px", // Set fixed width
-                    height: "40px", // Set fixed height
-                    textAlign: "center", // Ensure text is centered
-                    fontWeight: "bold", // Make text bold
-                    ml: "auto", // Push to the right
-                  }}
-                >
-                  Leer más
-                </Button>
-              </CardActions>
-            </Card>
-          </Grid>
-        ))}
-      </Grid>
+                  <Button
+                    size="small"
+                    onClick={() => handleCategoryClick(entry.categoria)}
+                    sx={{
+                      width: "250px", // Set fixed width
+                      height: "40px", // Set fixed height
+                      fontSize: "0.875rem", // Smaller font size
+                      textAlign: "left", // Align text to the left
+                      justifyContent: "flex-start", // Ensures text aligns left in a flex container
+                    }}
+                  >
+                    {entry.categoria}
+                  </Button>
+                  <Button
+                    size="small"
+                    variant="contained"
+                    component={Link}
+                    href={`/post/${entry.id}`}
+                    sx={{
+                      width: "95px", // Set fixed width
+                      height: "40px", // Set fixed height
+                      textAlign: "center", // Ensure text is centered
+                      fontWeight: "bold", // Make text bold
+                      ml: "auto", // Push to the right
+                    }}
+                  >
+                    Leer más
+                  </Button>
+                </CardActions>
+              </Card>
+            </Grid>
+          ))}
+        </Grid>
 
         {pagination && (
           <Box sx={{ display: "flex", justifyContent: "center", mt: 4 }}>
@@ -276,11 +283,20 @@ function HomeContent() {
 
 export default function Home() {
   return (
-    <Suspense fallback={
-      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
-        <CircularProgress size={60} />
-      </Box>
-    }>
+    <Suspense
+      fallback={
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            height: "100vh",
+          }}
+        >
+          <CircularProgress size={60} />
+        </Box>
+      }
+    >
       <HomeContent />
     </Suspense>
   );
