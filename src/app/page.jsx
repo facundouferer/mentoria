@@ -278,7 +278,7 @@ function HomeContent() {
           </Box>
         )}
       </Container>
-      <Footer />
+      {/* <Footer /> */}
     </>
   );
 }

@@ -16,6 +16,7 @@ import {
 } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import FlagIcon from "@mui/icons-material/Flag";
+import VoteButtons from "@/components/VoteButtons";
 // import Footer from "@/components/ui/Footer";
 
 export default function PostPage({ params }) {
@@ -99,11 +100,7 @@ export default function PostPage({ params }) {
     <>
       <Container maxWidth="lg" sx={{ py: 4 }}>
         <Box sx={{ display: "flex", justifyContent: "space-between", mb: 4 }}>
-          <Button
-            component={Link}
-            href="/"
-            startIcon={<ArrowBackIcon />}
-          >
+          <Button component={Link} href="/" startIcon={<ArrowBackIcon />}>
             Volver
           </Button>
           <Button
@@ -150,6 +147,12 @@ export default function PostPage({ params }) {
               </>
             )}
 
+            {/* Botón de votación */}
+            <Divider sx={{ my: 4 }} />
+            <Box sx={{ display: "flex", justifyContent: "center", mb: 3 }}>
+              <VoteButtons entryId={params.id} initialVote={post.userVote} />
+            </Box>
+
             <Box sx={{ mt: 3, color: "text.secondary" }}>
               <Typography variant="body2">
                 Categoría: {post.categoria}
@@ -161,8 +164,8 @@ export default function PostPage({ params }) {
           </CardContent>
         </Card>
       </Container>
-      <Footer />
-      
+      {/* <Footer /> */}
+
       <Snackbar
         open={snackbar.open}
         autoHideDuration={6000}
