@@ -18,6 +18,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import ThemeToggle from "./ThemeToggle";
+import Image from "next/image";
 
 const pages = [
   { title: "Inicio", path: "/" },
@@ -74,22 +75,14 @@ export default function Navbar({ mode, toggleColorMode }) {
             alignItems: "center", // Center items vertically
           }}
         >
-          {/* Logo/Title - Desktop */}
-          <Typography
-            variant="h6"
-            noWrap
-            component={Link}
-            href="/"
-            sx={{
-              mr: 2,
-              display: { xs: "none", md: "flex" },
-              fontWeight: 700,
-              color: "inherit",
-              textDecoration: "none",
-            }}
-          >
-            TutorIA
-          </Typography>
+          <Image
+            src="/imagenes-01.png"
+            alt="Banner"
+            width={0}
+            height={0}
+            style={{ width: "150px", height: "auto" }}
+            priority
+          />
 
           {/* Mobile menu */}
           <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
@@ -131,24 +124,6 @@ export default function Navbar({ mode, toggleColorMode }) {
               ))}
             </Menu>
           </Box>
-
-          {/* Logo/Title - Mobile */}
-          <Typography
-            variant="h5"
-            noWrap
-            component={Link}
-            href="/"
-            sx={{
-              mr: 2,
-              display: { xs: "flex", md: "none" },
-              flexGrow: 1,
-              fontWeight: 700,
-              color: "inherit",
-              textDecoration: "none",
-            }}
-          >
-            TutorIA
-          </Typography>
 
           {/* Desktop menu */}
           <Box
