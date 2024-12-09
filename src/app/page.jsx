@@ -20,7 +20,8 @@ import {
   CircularProgress,
 } from "@mui/material";
 // import Footer from "../components/Footer";
-
+import Banner from "../components/Banner";
+import CardArticulo from "../components/CardArticulo";
 function HomeContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -40,6 +41,12 @@ function HomeContent() {
     },
     [searchParams]
   );
+
+  const handleCategoryClick = (category) => {
+    setSelectedCategory(category);
+    setCurrentPage(1);
+    router.push(`/?category=${category}`);
+  };
 
   const fetchEntries = useCallback(
     async (page, limit, category = null) => {
@@ -75,12 +82,6 @@ function HomeContent() {
   useEffect(() => {
     fetchEntries(currentPage, itemsPerPage, selectedCategory);
   }, [currentPage, itemsPerPage, selectedCategory]);
-
-  const handleCategoryClick = (category) => {
-    setSelectedCategory(category);
-    setCurrentPage(1);
-    router.push(`/?category=${category}`);
-  };
 
   const handlePageChange = (_, page) => {
     setCurrentPage(page);
@@ -170,7 +171,12 @@ function HomeContent() {
         <Grid container spacing={3}>
           {entries?.map((entry) => (
             <Grid item key={entry.id} xs={12} sm={6} md={4}>
-              <CardArticulo entry={entry} />
+              <CardArticulo
+                props={{
+                  entry,
+                  handleCategoryClick,
+                }}
+              />
             </Grid>
           ))}
         </Grid>

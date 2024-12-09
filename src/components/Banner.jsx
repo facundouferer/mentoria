@@ -4,8 +4,12 @@ import Image from "next/image";
 export default function Banner() {
   return (
     <>
-      <Container className="rounded-lg mt-4" maxWidth="lg" sx={{ py: 4 }}>
-        <Box sx={{ py: 2, width: "100%" }}>
+      <Container
+        className="rounded-lg mt-4 border-4 border-blue-400"
+        maxWidth="lg"
+        sx={{ py: 2 }}
+      >
+        <Box sx={{ width: "100%" }}>
           <Box
             sx={{
               display: "flex",
@@ -21,7 +25,6 @@ export default function Banner() {
                 textAlign: { xs: "center", md: "left" },
                 px: 1,
                 maxWidth: { xs: "100%", md: "40%" },
-                color: "#1a237e",
               }}
             >
               Los textos e imágenes de este sitio son creados con inteligencia
@@ -34,9 +37,17 @@ export default function Banner() {
               alt="Banner"
               width={0}
               height={0}
-              sizes="100vw"
-              style={{ width: "80%", height: "auto" }}
+              style={{ width: "40%", height: "auto" }}
               priority
+              className="ocultoEnMovil"
+            />
+            <Image
+              src="/imagenes-03.png"
+              alt="Banner"
+              width={0}
+              height={0}
+              style={{ width: "30%", height: "auto" }}
+              className="ocultoEnMovil"
             />
           </Box>
         </Box>
