@@ -1,7 +1,7 @@
-'use client';
-import { ThemeProvider, createTheme } from '@mui/material/styles';
-import CssBaseline from '@mui/material/CssBaseline';
-import { useColorMode } from '@/hooks/useColorMode';
+"use client";
+import { ThemeProvider, createTheme } from "@mui/material/styles";
+import CssBaseline from "@mui/material/CssBaseline";
+import { useColorMode } from "@/hooks/useColorMode";
 
 export default function ThemeRegistry({ children }) {
   const { mode } = useColorMode();
@@ -10,10 +10,10 @@ export default function ThemeRegistry({ children }) {
     palette: {
       mode,
       primary: {
-        main: '#1976d2',
+        main: "#1976d2",
       },
       secondary: {
-        main: '#dc004e',
+        main: "#dc004e",
       },
     },
   });
