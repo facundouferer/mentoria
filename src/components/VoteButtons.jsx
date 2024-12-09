@@ -1,20 +1,36 @@
 'use client';
+
 import { useState } from 'react';
 import { Box, IconButton, Tooltip } from '@mui/material';
 import SentimentSatisfiedAltIcon from '@mui/icons-material/SentimentSatisfiedAlt';
 import SentimentDissatisfiedIcon from '@mui/icons-material/SentimentDissatisfied';
 import SentimentNeutralIcon from '@mui/icons-material/SentimentNeutral';
+import { showCaptchaPopup } from './CaptchaPopup';
 
 export default function VoteButtons({ entryId, initialVote = null }) {
   const [currentVote, setCurrentVote] = useState(initialVote);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [captchaCompleted, setCaptchaCompleted] = useState(
+    typeof window !== 'undefined' && localStorage.getItem('captchaCompleted') === 'true'
+  );
 
   const handleVote = async (vote) => {
     if (isSubmitting) return;
-    
+
+    if (!captchaCompleted) {
+      const success = await showCaptchaPopup(); // Llamar al componente Captcha
+      if (!success) {
+        console.error('CAPTCHA Failed');
+        return;
+      }
+
+      localStorage.setItem('captchaCompleted', 'true');
+      setCaptchaCompleted(true);
+    }
+
     try {
       setIsSubmitting(true);
-      const response = await fetch('/api/vote', {   // Hay que hacer todavía los endpoints cuando esté accesible la base de datos
+      const response = await fetch('/api/vote', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -26,12 +42,12 @@ export default function VoteButtons({ entryId, initialVote = null }) {
       });
 
       if (!response.ok) {
-        throw new Error('Fallo al mandar el voto');
+        throw new Error('Failed to submit vote');
       }
 
       setCurrentVote(currentVote === vote ? null : vote);
     } catch (error) {
-      console.error('Error al votar:', error);
+      console.error('Error voting:', error);
     } finally {
       setIsSubmitting(false);
     }
@@ -45,7 +61,7 @@ export default function VoteButtons({ entryId, initialVote = null }) {
           color={currentVote === 'dislike' ? 'error' : 'default'}
           disabled={isSubmitting}
         >
-          <SentimentDissatisfiedIcon fontSize='large' />
+          <SentimentDissatisfiedIcon fontSize="large" />
         </IconButton>
       </Tooltip>
 
@@ -55,7 +71,7 @@ export default function VoteButtons({ entryId, initialVote = null }) {
           color={currentVote === 'meh' ? 'primary' : 'default'}
           disabled={isSubmitting}
         >
-          <SentimentNeutralIcon fontSize='large' />
+          <SentimentNeutralIcon fontSize="large" />
         </IconButton>
       </Tooltip>
 
@@ -65,7 +81,7 @@ export default function VoteButtons({ entryId, initialVote = null }) {
           color={currentVote === 'like' ? 'success' : 'default'}
           disabled={isSubmitting}
         >
-          <SentimentSatisfiedAltIcon fontSize='large' />
+          <SentimentSatisfiedAltIcon fontSize="large" />
         </IconButton>
       </Tooltip>
     </Box>
