@@ -143,47 +143,51 @@ export default function Navbar({ mode, toggleColorMode }) {
               </Button>
             ))}
           </Box>
-
-          {/* Search Box */}
           <Box
             sx={{
-              position: "relative",
-              backgroundColor: alpha("#fff", 0.15),
-              "&:hover": { backgroundColor: alpha("#fff", 0.25) },
-              borderRadius: 1,
-              marginLeft: 2,
-              width: "auto",
+              display: { xs: "none", md: "block" }, // xs (móvil): none, md (desktop): block
             }}
           >
+            {/* Search Box */}
             <Box
               sx={{
-                padding: "0 16px",
-                height: "100%",
-                position: "absolute",
-                display: "flex",
-                alignItems: "center",
+                position: "relative",
+                backgroundColor: alpha("#fff", 0.15),
+                "&:hover": { backgroundColor: alpha("#fff", 0.25) },
+                borderRadius: 1,
+                marginLeft: 2,
+                width: "auto",
               }}
             >
-              <SearchIcon />
-            </Box>
-            <InputBase
-              placeholder="Buscar..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              onKeyPress={handleSearch}
-              sx={{
-                color: "inherit",
-                padding: "8px 8px 8px 48px",
-                width: "100%",
-                "& input": {
+              <Box
+                sx={{
+                  padding: "0 16px",
+                  height: "100%",
+                  position: "absolute",
+                  display: "flex",
+                  alignItems: "center",
+                }}
+              >
+                <SearchIcon />
+              </Box>
+              <InputBase
+                placeholder="Buscar..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                onKeyPress={handleSearch}
+                sx={{
                   color: "inherit",
-                  padding: "4px",
-                  width: "200px",
-                },
-              }}
-            />
+                  padding: "8px 8px 8px 48px",
+                  width: "100%",
+                  "& input": {
+                    color: "inherit",
+                    padding: "4px",
+                    width: "200px",
+                  },
+                }}
+              />
+            </Box>
           </Box>
-
           {/* Theme Toggle */}
           <ThemeToggle mode={mode} toggleColorMode={toggleColorMode} />
         </Toolbar>
