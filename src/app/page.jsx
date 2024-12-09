@@ -19,9 +19,7 @@ import {
   Box,
   CircularProgress,
 } from "@mui/material";
-import Footer from "../components/Footer";
-import Banner from "../components/Banner";
-import CardArticulo from "../components/CardArticulo";
+// import Footer from "../components/Footer";
 
 function HomeContent() {
   const router = useRouter();
@@ -191,7 +189,7 @@ function HomeContent() {
           </Box>
         )}
       </Container>
-      <Footer />
+      {/* <Footer /> */}
     </>
   );
 }

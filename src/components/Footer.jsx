@@ -27,7 +27,7 @@ export default function Footer() {
               </Box>
               <Box component="li" sx={{ mb: 1 }}>
                 <Link
-                  href="#"
+                  href="/about"
                   color="inherit"
                   underline="hover"
                   sx={{ color: "white" }}
