@@ -1,14 +1,9 @@
 "use client";
 import { useEffect, useState, useCallback, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import Link from "next/link";
 import {
   Container,
   Grid,
-  Card,
-  CardMedia,
-  CardActions,
-  CardContent,
   Typography,
   Button,
   Select,
@@ -22,10 +17,6 @@ import {
 // import Footer from "../components/Footer";
 import Banner from "../components/Banner";
 import CardArticulo from "../components/CardArticulo";
-=========
-// import Footer from "../components/Footer";
->>>>>>>>> Temporary merge branch 2
-
 function HomeContent() {
   const router = useRouter();
   const searchParams = useSearchParams();

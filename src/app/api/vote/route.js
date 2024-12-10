@@ -1,34 +1,32 @@
-import { NextResponse } from 'next/server';
-import pool from '@/lib/db';
+import { NextResponse } from "next/server";
+import pool from "@/lib/db";
 
-export async function POST(request) {
+export async function PATCH(request) {
+  const connection = await pool.getConnection();
+  const { entryId, parsedVote } = await request.json();
+
+  // Validación, por las dudas
+  if (!entryId || typeof parsedVote !== "number") {
+    throw new Error("Invalid input data");
+  }
+
   try {
-    const { entryId, vote } = await request.json();
+    const [result] = await connection.execute(
+      "UPDATE entries SET valoracion = valoracion + ?  WHERE id = ?",
+      [parsedVote, entryId]
+    );
 
-    // Template endpoint - Replace with your actual database logic
-    // Example using a hypothetical database client:
-    /*
-    await db.entry.update({
-      where: { id: entryId },
-      data: {
-        ratings: {
-          create: {
-            vote: vote,
-            userId: session.user.id // If implementing user authentication
-          }
-        }
-      }
-    });
-    */
+    if (result.affectedRows === 0) {
+      throw new Error("No se ha encontrado el artículo");
+    }
 
-    // For now, just log the vote
-    console.log(`Received vote: ${vote} for entry: ${entryId}`);
+    console.log(`Received vote: ${parsedVote} for entry: ${entryId}`);
 
     return NextResponse.json({ success: true });
   } catch (error) {
-    console.error('Error processing vote:', error);
+    console.error("Error processing vote:", error);
     return NextResponse.json(
-      { error: 'Error al procesar el voto' },
+      { error: "Error al procesar el voto" },
       { status: 500 }
     );
   }
