@@ -11,6 +11,7 @@ export async function GET(request) {
     const offset = (page - 1) * limit;
     const search = searchParams.get('search');
     const category = searchParams.get('category');
+    const sort = searchParams.get('sort');
 
     let query = 'SELECT * FROM entries WHERE 1=1';
     let countQuery = 'SELECT COUNT(*) as total FROM entries WHERE 1=1';
@@ -32,7 +33,15 @@ export async function GET(request) {
       countParams.push(searchTerm, searchTerm, searchTerm);
     }
 
-    query += ' ORDER BY id DESC LIMIT ? OFFSET ?';
+    // Ordenar
+    if (sort === 'valoracion') {
+      query += ' ORDER BY valoracion DESC';
+    } else {
+      query += ' ORDER BY id DESC';
+    }
+
+    // Paginación después de ordenar (se rompe todo sino)
+    query += ' LIMIT ? OFFSET ?';
     params.push(limit, offset);
 
     const [totalRows] = await pool.execute(countQuery, countParams);
