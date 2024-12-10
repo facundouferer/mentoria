@@ -14,7 +14,9 @@ const stripHtml = (html) => {
   return doc.body.textContent || "";
 };
 
-export default function CardArticulo({ entry }) {
+export default function CardArticulo({ props }) {
+  const { entry, handleCategoryClick } = props;
+
   return (
     <>
       <Card
