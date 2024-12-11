@@ -76,11 +76,11 @@ export default function Navbar({ mode, toggleColorMode }) {
           }}
         >
           <Image
-            src="/imagenes-01.png"
+            src="/imagenes-02.png"
             alt="Banner"
             width={0}
             height={0}
-            style={{ width: "150px", height: "auto" }}
+            style={{ width: "100px", height: "auto" }}
             priority
           />
 

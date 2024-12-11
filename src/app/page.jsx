@@ -75,13 +75,14 @@ function HomeContent() {
   );
 
   useEffect(() => {
+    const searchQuery = searchParams.get("search");
     setCurrentPage(1);
     fetchEntries(1, itemsPerPage, selectedCategory);
-  }, [searchParams.get("search"), itemsPerPage, selectedCategory]);
+  }, [searchParams, itemsPerPage, selectedCategory, fetchEntries]);
 
   useEffect(() => {
     fetchEntries(currentPage, itemsPerPage, selectedCategory);
-  }, [currentPage, itemsPerPage, selectedCategory]);
+  }, [currentPage, itemsPerPage, selectedCategory, fetchEntries]);
 
   const handlePageChange = (_, page) => {
     setCurrentPage(page);

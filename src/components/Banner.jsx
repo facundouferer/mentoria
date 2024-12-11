@@ -33,7 +33,7 @@ export default function Banner() {
               educativo.
             </Typography>
             <Image
-              src="/imagenes-06.png"
+              src="/imagenes-07.png"
               alt="Banner"
               width={0}
               height={0}
@@ -42,7 +42,7 @@ export default function Banner() {
               className="ocultoEnMovil"
             />
             <Image
-              src="/imagenes-03.png"
+              src="/imagenes-04.png"
               alt="Banner"
               width={0}
               height={0}
