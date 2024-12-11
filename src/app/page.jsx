@@ -1,14 +1,10 @@
 "use client";
+
 import { useEffect, useState, useCallback, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import Link from "next/link";
 import {
   Container,
   Grid,
-  Card,
-  CardMedia,
-  CardActions,
-  CardContent,
   Typography,
   Button,
   Select,
@@ -19,9 +15,10 @@ import {
   Box,
   CircularProgress,
 } from "@mui/material";
-// import Footer from "../components/Footer";
 import Banner from "../components/Banner";
 import CardArticulo from "../components/CardArticulo";
+import SortEntries from "@/components/SortEntries";
+
 function HomeContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -32,6 +29,7 @@ function HomeContent() {
   const [pagination, setPagination] = useState(null);
   const [itemsPerPage, setItemsPerPage] = useState(12);
   const [selectedCategory, setSelectedCategory] = useState(null);
+  const [sortBy, setSortBy] = useState("reciente");
 
   const createQueryString = useCallback(
     (name, value) => {
@@ -48,6 +46,12 @@ function HomeContent() {
     router.push(`/?category=${category}`);
   };
 
+  const handleSortChange = (value) => {
+    setSortBy(value);
+    setCurrentPage(1);
+    router.replace(`/?${createQueryString("sort", value)}`, { scroll: false });
+  };
+
   const fetchEntries = useCallback(
     async (page, limit, category = null) => {
       try {
@@ -56,6 +60,7 @@ function HomeContent() {
         params.set("page", page);
         params.set("limit", limit);
         if (category) params.set("category", category);
+        if (sortBy) params.set("sort", sortBy);
 
         const search = searchParams.get("search");
         if (search) params.set("search", search);
@@ -71,18 +76,18 @@ function HomeContent() {
         setLoading(false);
       }
     },
-    [searchParams]
+    [searchParams, sortBy]
   );
 
   useEffect(() => {
     const searchQuery = searchParams.get("search");
     setCurrentPage(1);
     fetchEntries(1, itemsPerPage, selectedCategory);
-  }, [searchParams, itemsPerPage, selectedCategory, fetchEntries]);
+  }, [searchParams.get("search"), itemsPerPage, selectedCategory, sortBy]);
 
   useEffect(() => {
     fetchEntries(currentPage, itemsPerPage, selectedCategory);
-  }, [currentPage, itemsPerPage, selectedCategory, fetchEntries]);
+  }, [currentPage, itemsPerPage, selectedCategory, sortBy]);
 
   const handlePageChange = (_, page) => {
     setCurrentPage(page);
@@ -166,6 +171,8 @@ function HomeContent() {
               <MenuItem value={12}>12 por página</MenuItem>
             </Select>
           </FormControl>
+
+          <SortEntries onSortChange={handleSortChange} />
         </Box>
 
         {/* Media Card */}

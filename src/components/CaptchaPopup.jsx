@@ -11,18 +11,19 @@ export const showCaptchaPopup = () => {
     swalContent.id = "recaptcha-container";
 
     MySwal.fire({
-      title: "Complete CAPTCHA",
+      title: "Complete el CAPTCHA",
       html: swalContent,
       showCancelButton: false,
       showConfirmButton: false,
-      allowOutsideClick: false,
+      allowOutsideClick: true,
       didOpen: () => {
         const root = ReactDOM.createRoot(
           document.getElementById("recaptcha-container")
         );
         root.render(
           <ReCAPTCHA
-            sitekey="6LcYkpYqAAAAAHVs8eHgSBjZAEJ94kGiL_O-Tx_y"
+            sitekey={process.env.RECAPTCHA_SITE_KEY}
+            style={{ display: "inline-block", margin: "0 auto" }}
             onChange={(token) => {
               if (token) {
                 Swal.close(); // Close the popup

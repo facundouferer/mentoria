@@ -18,7 +18,7 @@ export default function VoteButtons({ entryId, initialVote = null }) {
     if (isSubmitting) return;
 
     if (!captchaCompleted) {
-      const success = await showCaptchaPopup(); // Llamar al componente Captcha
+       const success = await showCaptchaPopup(); // Llamar al componente Captcha
       if (!success) {
         console.error('CAPTCHA Failed');
         return;
@@ -27,17 +27,24 @@ export default function VoteButtons({ entryId, initialVote = null }) {
       localStorage.setItem('captchaCompleted', 'true');
       setCaptchaCompleted(true);
     }
+   const voteMap = {
+    like: 2,
+    dislike: -1,
+    meh: 1,
+  };
+
+  const parsedVote = voteMap[vote];
 
     try {
       setIsSubmitting(true);
       const response = await fetch('/api/vote', {
-        method: 'POST',
+        method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           entryId,
-          vote,
+          parsedVote,
         }),
       });
 
@@ -57,7 +64,7 @@ export default function VoteButtons({ entryId, initialVote = null }) {
     <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
       <Tooltip title="No me gustó">
         <IconButton
-          onClick={() => handleVote('dislike')}
+          onClick={() => handleVote("dislike")}
           color={currentVote === 'dislike' ? 'error' : 'default'}
           disabled={isSubmitting}
         >
@@ -67,7 +74,7 @@ export default function VoteButtons({ entryId, initialVote = null }) {
 
       <Tooltip title="Neutral">
         <IconButton
-          onClick={() => handleVote('meh')}
+          onClick={() => handleVote("meh")}
           color={currentVote === 'meh' ? 'primary' : 'default'}
           disabled={isSubmitting}
         >
@@ -77,7 +84,7 @@ export default function VoteButtons({ entryId, initialVote = null }) {
 
       <Tooltip title="Me gustó">
         <IconButton
-          onClick={() => handleVote('like')}
+          onClick={() => handleVote("like")}
           color={currentVote === 'like' ? 'success' : 'default'}
           disabled={isSubmitting}
         >
