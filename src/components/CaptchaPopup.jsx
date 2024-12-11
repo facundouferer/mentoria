@@ -19,7 +19,7 @@ export const showCaptchaPopup = () => {
       didOpen: () => {
         ReactDOM.render(
           <ReCAPTCHA
-            sitekey="6LcYkpYqAAAAAHVs8eHgSBjZAEJ94kGiL_O-Tx_y"
+            sitekey="6LeOo5gqAAAAADYVf0C2X5_AXjXpayHXWQsodBFo"
             onChange={(token) => {
               if (token) {
                 Swal.close(); // Close the popup
