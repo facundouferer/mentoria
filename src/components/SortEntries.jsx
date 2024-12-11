@@ -11,7 +11,7 @@ export default function SortEntries({ onSortChange }) {
         label="Ordenar por"
         onChange={(e) => onSortChange(e.target.value)}
       >
-        <MenuItem value="">Más recientes</MenuItem>
+        <MenuItem value="reciente">Más recientes</MenuItem>
         <MenuItem value="valoracion">Mejor valorados</MenuItem>
       </Select>
     </FormControl>

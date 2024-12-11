@@ -29,7 +29,7 @@ function HomeContent() {
   const [pagination, setPagination] = useState(null);
   const [itemsPerPage, setItemsPerPage] = useState(12);
   const [selectedCategory, setSelectedCategory] = useState(null);
-  const [sortBy, setSortBy] = useState("");
+  const [sortBy, setSortBy] = useState("reciente");
 
   const createQueryString = useCallback(
     (name, value) => {
