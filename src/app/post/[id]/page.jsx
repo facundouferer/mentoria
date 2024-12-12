@@ -13,6 +13,7 @@ import {
   CircularProgress,
   Snackbar,
   Alert,
+  Tooltip,
 } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import FlagIcon from "@mui/icons-material/Flag";
@@ -63,7 +64,7 @@ export default function PostPage({ params }) {
 
       setSnackbar({
         open: true,
-        message: "Artículo reportado correctamente",
+        message: "Artículo enviado para revisión",
         severity: "success",
       });
     } catch (error) {
@@ -103,14 +104,18 @@ export default function PostPage({ params }) {
           <Button component={Link} href="/" startIcon={<ArrowBackIcon />}>
             Volver
           </Button>
-          <Button
-            startIcon={<FlagIcon />}
-            onClick={handleReport}
-            color="warning"
-            variant="outlined"
-          >
-            Reportar artículo
-          </Button>
+
+          <Tooltip title="Reportar contenido incorrecto">
+            <Button
+              startIcon={<FlagIcon />}
+              onClick={handleReport}
+              color="warning"
+              variant="outlined"
+              hoverColor="warning"
+            >
+              Reportar
+            </Button>
+          </Tooltip>
         </Box>
 
         <Card>
