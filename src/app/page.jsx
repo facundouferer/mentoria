@@ -80,6 +80,7 @@ function HomeContent() {
   );
 
   useEffect(() => {
+    const searchQuery = searchParams.get("search");
     setCurrentPage(1);
     fetchEntries(1, itemsPerPage, selectedCategory);
   }, [searchParams.get("search"), itemsPerPage, selectedCategory, sortBy]);

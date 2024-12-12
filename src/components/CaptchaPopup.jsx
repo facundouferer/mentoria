@@ -1,14 +1,14 @@
-import Swal from 'sweetalert2';
-import withReactContent from 'sweetalert2-react-content';
-import ReCAPTCHA from 'react-google-recaptcha';
-import ReactDOM from 'react-dom';
+import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
+import ReCAPTCHA from "react-google-recaptcha";
+import ReactDOM from "react-dom";
 
 const MySwal = withReactContent(Swal);
 
 export const showCaptchaPopup = () => {
   return new Promise((resolve) => {
-    const swalContent = document.createElement('div');
-    swalContent.id = 'recaptcha-container';
+    const swalContent = document.createElement("div");
+    swalContent.id = "recaptcha-container";
 
     MySwal.fire({
       title: 'Complete el CAPTCHA',
@@ -17,7 +17,10 @@ export const showCaptchaPopup = () => {
       showConfirmButton: false,
       allowOutsideClick: true,
       didOpen: () => {
-        ReactDOM.render(
+        const root = ReactDOM.createRoot(
+          document.getElementById("recaptcha-container")
+        );
+        root.render(
           <ReCAPTCHA
             sitekey={process.env.RECAPTCHA_SITE_KEY}
             style={{ display: 'inline-block', margin: '0 auto' }}
@@ -27,8 +30,7 @@ export const showCaptchaPopup = () => {
                 resolve(true); // Resolve the promise
               }
             }}
-          />,
-          document.getElementById('recaptcha-container')
+          />
         );
       },
     });
