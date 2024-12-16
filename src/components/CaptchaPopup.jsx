@@ -22,7 +22,7 @@ export const showCaptchaPopup = () => {
         );
         root.render(
           <ReCAPTCHA
-            sitekey={process.env.RECAPTCHA_SITE_KEY}
+            sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY}
             style={{ display: "inline-block", margin: "0 auto" }}
             onChange={(token) => {
               if (token) {

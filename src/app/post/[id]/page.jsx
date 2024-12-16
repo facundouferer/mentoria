@@ -119,10 +119,7 @@ export default function PostPage({ params }) {
               {post.titulo}
             </Typography>
 
-            <div
-              className="text-gray-600"
-              dangerouslySetInnerHTML={{ __html: post.bajada }}
-            />
+            <div dangerouslySetInnerHTML={{ __html: post.bajada }} />
 
             {post.img_local && (
               <CardMedia
