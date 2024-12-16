@@ -18,7 +18,6 @@ import {
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import VoteButtons from "@/components/VoteButtons";
 import ReportButton from "@/components/ReportButton";
-// import Footer from "@/components/ui/Footer";
 
 export default function PostPage({ params }) {
   const [post, setPost] = useState(null);
