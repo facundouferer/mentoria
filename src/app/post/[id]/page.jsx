@@ -16,8 +16,8 @@ import {
   Tooltip,
 } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import FlagIcon from "@mui/icons-material/Flag";
 import VoteButtons from "@/components/VoteButtons";
+import ReportButton from "@/components/ReportButton";
 // import Footer from "@/components/ui/Footer";
 
 export default function PostPage({ params }) {
@@ -101,20 +101,17 @@ export default function PostPage({ params }) {
     <>
       <Container maxWidth="lg" sx={{ py: 4 }}>
         <Box sx={{ display: "flex", justifyContent: "space-between", mb: 4 }}>
-          <Button component={Link} href="/" startIcon={<ArrowBackIcon />}>
+          <Button
+            component={Link}
+            href="/"
+            startIcon={<ArrowBackIcon props={{ post, handleReport }} />}
+          >
             Volver
           </Button>
 
+          {/* Reportar */}
           <Tooltip title="Reportar contenido incorrecto">
-            <Button
-              startIcon={<FlagIcon />}
-              onClick={handleReport}
-              color="warning"
-              variant="outlined"
-              hoverColor="warning"
-            >
-              Reportar
-            </Button>
+            <ReportButton props={{ handleReport, post }} />
           </Tooltip>
         </Box>
 
@@ -169,7 +166,6 @@ export default function PostPage({ params }) {
           </CardContent>
         </Card>
       </Container>
-      {/* <Footer /> */}
 
       <Snackbar
         open={snackbar.open}
