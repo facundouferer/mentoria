@@ -132,7 +132,8 @@ export default function PostPage({ params }) {
                 image={post.img_local}
                 alt={post.titulo}
                 sx={{
-                  borderRadius: 1,
+                  borderRadius: 3,
+                  my: 3,
                 }}
               />
             )}

@@ -28,9 +28,8 @@ export default function Banner() {
               }}
             >
               Los textos e imágenes de este sitio son creados con inteligencia
-              artificial, pero no reemplazan la labor docente. El trabajo humano
-              es clave para aportar experiencia, sensibilidad y enfoque
-              educativo.
+              artificial. No reemplazan la labor docente, ya que el trabajo
+              humano es clave para aportar sensibilidad y enfoque educativo.
             </Typography>
             <Image
               src="/imagenes-07.png"
