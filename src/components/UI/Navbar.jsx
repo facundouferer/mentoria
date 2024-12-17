@@ -75,14 +75,16 @@ export default function Navbar({ mode, toggleColorMode }) {
             alignItems: "center", // Center items vertically
           }}
         >
-          <Image
-            src="/imagenes-02.png"
-            alt="Banner"
-            width={0}
-            height={0}
-            style={{ width: "100px", height: "auto" }}
-            priority
-          />
+          <Link href="/">
+            <Image
+              src="/imagenes-02.png"
+              alt="Banner"
+              width={0}
+              height={0}
+              style={{ width: "100px", height: "auto" }}
+              priority
+            />
+          </Link>
 
           {/* Mobile menu */}
           <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>

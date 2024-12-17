@@ -14,8 +14,25 @@ const stripHtml = (html) => {
   return doc.body.textContent || "";
 };
 
+const stringToColor = (str) => {
+  // Tomamos solo el texto hasta la primera coma
+  const textForColor = str.split(",")[0];
+
+  let hash = 0;
+  for (let i = 0; i < textForColor.length; i++) {
+    hash = textForColor.charCodeAt(i) + ((hash << 5) - hash);
+  }
+  let color = "#";
+  for (let i = 0; i < 3; i++) {
+    const value = (hash >> (i * 8)) & 0xff;
+    color += ("00" + value.toString(16)).substr(-2);
+  }
+  return color;
+};
+
 export default function CardArticulo({ props }) {
   const { entry, handleCategoryClick } = props;
+  const categoriaColor = stringToColor(entry.categoria);
 
   return (
     <>
@@ -83,6 +100,14 @@ export default function CardArticulo({ props }) {
               fontSize: "0.875rem", // Smaller font size
               textAlign: "left", // Align text to the left
               justifyContent: "flex-start", // Ensures text aligns left in a flex container
+              color: categoriaColor, // Aplicamos el color aquí
+              fontWeight: "bold",
+              textShadow: "0px 0px 1px rgba(0, 0, 0, 0.3)",
+              blurRadius: "5px",
+              "&:hover": {
+                color: categoriaColor, // Mantenemos el color en hover
+                opacity: 0.8, // Añadimos un efecto de opacidad al hover
+              },
             }}
           >
             {entry.categoria}

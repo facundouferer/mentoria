@@ -20,7 +20,7 @@ export const showCaptchaPopup = () => {
     swalContent.id = "recaptcha-container";
 
     MySwal.fire({
-      title: 'Complete el CAPTCHA',
+      title: "Complete el CAPTCHA",
       html: swalContent,
       showCancelButton: false,
       showConfirmButton: false,
@@ -32,7 +32,7 @@ export const showCaptchaPopup = () => {
         root.render(
           <ReCAPTCHA
             sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY}
-            style={{ display: 'inline-block', margin: '0 auto' }}
+            style={{ display: "inline-block", margin: "0 auto" }}
             onChange={(token) => {
               if (token) {
                 Swal.close(); // Cerrar popup
