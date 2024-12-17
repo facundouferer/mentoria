@@ -10,30 +10,23 @@ import { showCaptchaPopup } from './CaptchaPopup';
 export default function VoteButtons({ entryId, initialVote = null }) {
   const [currentVote, setCurrentVote] = useState(initialVote);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [captchaCompleted, setCaptchaCompleted] = useState(
-    typeof window !== 'undefined' && localStorage.getItem('captchaCompleted') === 'true'
-  );
 
   const handleVote = async (vote) => {
     if (isSubmitting) return;
 
-    if (!captchaCompleted) {
-       const success = await showCaptchaPopup(); // Llamar al componente Captcha
-      if (!success) {
-        console.error('CAPTCHA Failed');
-        return;
-      }
-
-      localStorage.setItem('captchaCompleted', 'true');
-      setCaptchaCompleted(true);
+    const success = await showCaptchaPopup(); 
+    if (!success) {
+      console.error('CAPTCHA Failed');
+      return;
     }
-   const voteMap = {
-    like: 2,
-    dislike: -1,
-    meh: 1,
-  };
 
-  const parsedVote = voteMap[vote];
+    const voteMap = {
+      like: 2,
+      dislike: -1,
+      meh: 1,
+    };
+
+    const parsedVote = voteMap[vote];
 
     try {
       setIsSubmitting(true);
