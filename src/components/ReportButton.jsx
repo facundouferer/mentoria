@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import { Button } from "@mui/material";
 import FlagIcon from "@mui/icons-material/Flag";
@@ -12,39 +12,39 @@ export default function ReportButton({ props }) {
 
   // Revisar si el post ya fue reportado
   useEffect(() => {
-    const reportedPosts =
-      JSON.parse(localStorage.getItem("reportedPosts")) || [];
+    const reportedPosts = JSON.parse(localStorage.getItem("reportedPosts")) || [];
     setIsReported(reportedPosts.includes(post.id));
   }, [post.id]);
 
   const handleClick = async () => {
     if (isSubmitting || isReported) return;
 
-    // Deshabilita el botón
+    // Deshabilita el botón 
     setIsSubmitting(true);
 
     const success = await showCaptchaPopup();
     if (!success) {
-      console.error("CAPTCHA Failed");
-      setIsSubmitting(false);
+      console.error('CAPTCHA Failed');
+      setIsSubmitting(false);  
       return;
     }
 
     try {
-      handleReport(post);
-    } catch (error) {
-      console.error("Error reportando el post:", error);
+      
 
       // Marcar el post como reportado
       setIsReported(true);
 
       // Almacenar el estado
-      const reportedPosts =
-        JSON.parse(localStorage.getItem("reportedPosts")) || [];
+      const reportedPosts = JSON.parse(localStorage.getItem("reportedPosts")) || [];
+      handleReport(post);
+    } catch (error) {
+      console.error('Error reportando el post:', error);
       reportedPosts.push(post.id);
       localStorage.setItem("reportedPosts", JSON.stringify(reportedPosts));
+
     } finally {
-      setIsSubmitting(false);
+      setIsSubmitting(false); 
     }
   };
 
@@ -52,7 +52,7 @@ export default function ReportButton({ props }) {
     <Button
       startIcon={<FlagIcon />}
       onClick={handleClick}
-      disabled={isSubmitting || isReported} // Deshabilitar el botón si ya se ha reportado o si se está enviando
+      disabled={isSubmitting || isReported}  // Deshabilitar el botón si ya se ha reportado o si se está enviando
       color="warning"
       variant="outlined"
     >
