@@ -13,13 +13,12 @@ import {
 } from "@mui/material";
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
-import Link from "@tiptap/extension-link";
-import Image from "@tiptap/extension-image";
 
 export default function EditPostPage({ params }) {
   const [post, setPost] = useState(null);
   const [loading, setLoading] = useState(true);
   const [title, setTitle] = useState("");
+  const [bajada, setBajada] = useState("");
   const [questions, setQuestions] = useState("");
   const [showPreview, setShowPreview] = useState(false);
 
@@ -27,7 +26,7 @@ export default function EditPostPage({ params }) {
   const { data: session } = useSession();
 
   const tiptapEditor = useEditor({
-    extensions: [StarterKit, Link, Image],
+    extensions: [StarterKit],
     content: post?.desarrollo || "<p>Loading...</p>",
     onUpdate: ({ editor }) => {
       setPost({ ...post, desarrollo: editor.getHTML() });
@@ -42,6 +41,7 @@ export default function EditPostPage({ params }) {
         if (data.entry) {
           setPost(data.entry);
           setTitle(data.entry.titulo);
+          setBajada(data.entry.bajada);
           setQuestions(data.entry.preguntas);
         }
         setLoading(false);
@@ -74,6 +74,7 @@ export default function EditPostPage({ params }) {
         },
         body: JSON.stringify({
           titulo: title,
+          bajada: bajada,
           desarrollo: post.desarrollo,
           preguntas: questions,
         }),
@@ -113,7 +114,18 @@ export default function EditPostPage({ params }) {
         fullWidth
         margin="normal"
       />
-      {tiptapEditor && <EditorContent editor={tiptapEditor} />} {/* The tiptap editor will allow editing the desarrollo part*/}
+      <TextField
+        label="Brief"
+        value={bajada}
+        onChange={(e) => setBajada(e.target.value)}
+        fullWidth
+        margin="normal"
+        multiline
+        rows={4}
+      />
+      <Paper variant="outlined" sx={{ padding: '10px', marginTop: '10px' }}>
+      {tiptapEditor && <EditorContent editor={tiptapEditor} />}
+      </Paper>
       <TextField
         label="Questions"
         value={questions}
@@ -140,6 +152,7 @@ export default function EditPostPage({ params }) {
           <Typography variant="h5" component="h2" gutterBottom>
             {title}
           </Typography>
+          <div dangerouslySetInnerHTML={{ __html: bajada }} />
           <div dangerouslySetInnerHTML={{ __html: post.desarrollo }} />
           {questions && (
             <>
