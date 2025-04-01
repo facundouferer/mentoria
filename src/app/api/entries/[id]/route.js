@@ -58,6 +58,70 @@ export async function PUT(request, props) {
   }
 }
 
+export async function PATCH(request, props) {
+  const params = await props.params;
+  try {
+    const data = await request.json();
+    const connection = await pool.getConnection();
+
+    let updateQuery = 'UPDATE entries SET modified = NOW()';
+    const values = [];
+
+    if (data.titulo) {
+      updateQuery += ', titulo = ?';
+      values.push(data.titulo);
+    }
+    if (data.bajada) {
+      updateQuery += ', bajada = ?';
+      values.push(data.bajada);
+    }
+    if (data.categoria) {
+      updateQuery += ', categoria = ?';
+      values.push(data.categoria);
+    }
+    if (data.categoria_y_tema) {
+      updateQuery += ', categoria_y_tema = ?';
+      values.push(data.categoria_y_tema);
+    }
+    if (data.desarrollo) {
+      updateQuery += ', desarrollo = ?';
+      values.push(data.desarrollo);
+    }
+    if (data.img_prompt) {
+      updateQuery += ', img_prompt = ?';
+      values.push(data.img_prompt);
+    }
+    if (data.img_remota) {
+      updateQuery += ', img_remota = ?';
+      values.push(data.img_remota);
+    }
+    if (data.img_local) {
+      updateQuery += ', img_local = ?';
+      values.push(data.img_local);
+    }
+    if (data.preguntas) {
+      updateQuery += ', preguntas = ?';
+      values.push(data.preguntas);
+    }
+
+    updateQuery += ' WHERE id = ?';
+    values.push(params.id);
+
+    await connection.execute(updateQuery, values);
+
+    connection.release();
+
+    return NextResponse.json({ message: 'Post actualizado correctamente' }, { status: 200 });
+  } catch (error) {
+    console.error('Error al actualizar el post:', error);
+    return NextResponse.json(
+      { error: 'Error al actualizar el post' },
+      { status: 500 }
+    );
+  }
+}
+
+
 export async function DELETE(request, props) {
   const params = await props.params;
   try {

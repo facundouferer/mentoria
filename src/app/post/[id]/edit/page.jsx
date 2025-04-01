@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, use } from "react";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import {
@@ -11,10 +11,12 @@ import {
   Typography,
   Paper,
 } from "@mui/material";
+import DeleteIcon from '@mui/icons-material/Delete';
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 
-export default function EditPostPage({ params }) {
+export default function EditPostPage(props) {
+  const params = use(props.params);
   const [post, setPost] = useState(null);
   const [loading, setLoading] = useState(true);
   const [title, setTitle] = useState("");
@@ -25,11 +27,23 @@ export default function EditPostPage({ params }) {
   const router = useRouter();
   const { data: session } = useSession();
 
-  const tiptapEditor = useEditor({
+  // Editor de texto enriquecido para el desarrollo
+  const desarrolloEditor = useEditor({
     extensions: [StarterKit],
-    content: post?.desarrollo || "<p>Loading...</p>",
+    content: post?.desarrollo || "<p>Cargando...</p>",
+    immediatelyRender: false,
     onUpdate: ({ editor }) => {
       setPost({ ...post, desarrollo: editor.getHTML() });
+    },
+  });
+
+  // Editor de texto enriquecido para la bajada
+  const bajadaEditor = useEditor({
+    extensions: [StarterKit],
+    content: post?.bajada || "<p>Cargando...</p>",
+    immediatelyRender: false,
+    onUpdate: ({ editor }) => {
+      setPost({ ...post, bajada: editor.getHTML() });
     },
   });
 
@@ -46,7 +60,7 @@ export default function EditPostPage({ params }) {
         }
         setLoading(false);
       } catch (error) {
-        console.error("Error fetching post:", error);
+        console.error("Error obteniendo el post:", error);
         setLoading(false);
       }
     };
@@ -55,26 +69,30 @@ export default function EditPostPage({ params }) {
   }, [params.id]);
 
   useEffect(() => {
-    if (tiptapEditor && post?.desarrollo) {
-      tiptapEditor.commands.setContent(post.desarrollo);
+    if (desarrolloEditor && post?.desarrollo) {
+      desarrolloEditor.commands.setContent(post.desarrollo);
     }
-  }, [tiptapEditor, post?.desarrollo]);
+    if (bajadaEditor && post?.bajada) {
+      bajadaEditor.commands.setContent(post.bajada);
+    }
+  }, [desarrolloEditor, post?.desarrollo, bajadaEditor, post?.bajada]);
 
+  // Handlers
   const handleUpdate = async () => {
     if (!session?.user || post?.userId !== session?.user?.id) {
-      alert("You are not authorized to edit this post.");
+      alert("No tienes permisos para modificar este post.");
       return;
     }
 
     try {
       const response = await fetch(`/api/entries/${params.id}`, {
-        method: "PUT",
+        method: "PATCH",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
           titulo: title,
-          bajada: bajada,
+          bajada: post.bajada,
           desarrollo: post.desarrollo,
           preguntas: questions,
         }),
@@ -83,10 +101,33 @@ export default function EditPostPage({ params }) {
       if (response.ok) {
         router.push(`/post/${params.id}`);
       } else {
-        alert("Failed to update post.");
+        alert("Falló al actualizar el post.");
       }
     } catch (error) {
-      console.error("Error updating post:", error);
+      console.error("Error actualizando el post:", error);
+    }
+  };
+
+  const handleDelete = async () => {
+    if (!session?.user || post?.userId !== session?.user?.id) {
+      alert("No tienes permisos para eliminar.");
+      return;
+    }
+
+    if (window.confirm("¿Está seguro de querer eliminarlo?")) {
+      try {
+        const response = await fetch(`/api/entries/${params.id}`, {
+          method: "DELETE",
+        });
+
+        if (response.ok) {
+          router.push("/");
+        } else {
+          alert("Fallo al borrar el post.");
+        }
+      } catch (error) {
+        console.error("Error borrando el post:", error);
+      }
     }
   };
 
@@ -103,31 +144,28 @@ export default function EditPostPage({ params }) {
         <CircularProgress />
       </Box>
     );
-  if (!post) return <div>Post not found</div>;
+  if (!post) return <div>Post no encontrado</div>;
 
   return (
-    <Container maxWidth="md" sx={{ mt: 4 }}>
+    // Título
+    <Container maxWidth="md" sx={{ mt: 4 }} className="mb-4">
       <TextField
-        label="Title"
+        label="Título"
         value={title}
         onChange={(e) => setTitle(e.target.value)}
         fullWidth
         margin="normal"
       />
-      <TextField
-        label="Brief"
-        value={bajada}
-        onChange={(e) => setBajada(e.target.value)}
-        fullWidth
-        margin="normal"
-        multiline
-        rows={4}
-      />
-      <Paper variant="outlined" sx={{ padding: '10px', marginTop: '10px' }}>
-      {tiptapEditor && <EditorContent editor={tiptapEditor} />}
+      <h2 className="text-2xl font-semibold">Bajada</h2>
+      <Paper variant="outlined" sx={{ padding: "10px", marginTop: "10px" }}>
+        {bajadaEditor && <EditorContent editor={bajadaEditor} />}
+      </Paper>
+      <h2 className="text-2xl font-semibold">Desarrollo</h2>
+      <Paper variant="outlined" sx={{ padding: "10px", marginTop: "10px" }}>
+        {desarrolloEditor && <EditorContent editor={desarrolloEditor} />}
       </Paper>
       <TextField
-        label="Questions"
+        label="Preguntas"
         value={questions}
         onChange={(e) => setQuestions(e.target.value)}
         fullWidth
@@ -137,13 +175,18 @@ export default function EditPostPage({ params }) {
       />
       <Box sx={{ display: "flex", justifyContent: "space-between", mt: 2 }}>
         <Button variant="contained" color="primary" onClick={handleUpdate}>
-          Update
+          Actualizar
         </Button>
         <Button
           variant="outlined"
-          onClick={() => setShowPreview(!showPreview)}
+          onClick={handleDelete}    
+          color="error"
+          startIcon={<DeleteIcon />}
         >
-          {showPreview ? "Hide Preview" : "Show Preview"}
+          Borrar
+        </Button>
+        <Button variant="outlined" onClick={() => setShowPreview(!showPreview)}>
+          {showPreview ? "Ocultar Vista Previa" : "Mostrar Vista Previa"}
         </Button>
       </Box>
 
