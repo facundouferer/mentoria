@@ -4,6 +4,7 @@ import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
+import { SessionProvider } from 'next-auth/react'; // Import SessionProvider
 
 export default function RootLayoutClient({ children }) {
   const [mode, setMode] = useState('light');
@@ -12,7 +13,7 @@ export default function RootLayoutClient({ children }) {
     // Revisar si hay un modo guardado en localStorage
     const savedMode = localStorage.getItem('color-mode');
     const systemPreference = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-    
+
     setMode(savedMode || systemPreference);
 
     // Escuchar cambios en el sistema
@@ -50,11 +51,13 @@ export default function RootLayoutClient({ children }) {
       <body>
         <ThemeProvider theme={theme}>
           <CssBaseline />
-          <Navbar mode={mode} toggleColorMode={toggleColorMode} />
-          <main className="container mx-auto px-4">
-            {children}
-          </main>
-          <Footer mode={mode} toggleColorMode={toggleColorMode}/>
+          <SessionProvider> {/* Wrap your content with SessionProvider */}
+            <Navbar mode={mode} toggleColorMode={toggleColorMode} />
+            <main className="container mx-auto px-4">
+              {children}
+            </main>
+            <Footer mode={mode} toggleColorMode={toggleColorMode} />
+          </SessionProvider>
         </ThemeProvider>
       </body>
     </html>

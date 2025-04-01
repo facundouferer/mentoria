@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useState, use } from "react";
 import Link from "next/link";
 import {
   Container,
@@ -17,10 +17,14 @@ import {
 } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import FlagIcon from "@mui/icons-material/Flag";
+import EditIcon from '@mui/icons-material/Edit';
 import VoteButtons from "@/components/VoteButtons";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 // import Footer from "@/components/ui/Footer";
 
-export default function PostPage({ params }) {
+export default function PostPage(props) {
+  const params = use(props.params);
   const [post, setPost] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -29,6 +33,8 @@ export default function PostPage({ params }) {
     message: "",
     severity: "success",
   });
+  const {data: session} = useSession(); // Obtener la sesión
+  const router = useRouter();
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -44,6 +50,12 @@ export default function PostPage({ params }) {
         setLoading(false);
       });
   }, [params.id]);
+
+  // Editar artículo
+  const handleEdit = () => {
+    router.push(`/post/${params.id}/edit`); // Navigate to edit page
+  };
+
 
   // Reporte de artículo
   const handleReport = async () => {
@@ -105,6 +117,17 @@ export default function PostPage({ params }) {
             Volver
           </Button>
 
+          <Box sx={{ display: "flex", gap:2}}>
+            {session?.user && post?.userId === session?.user?.id && ( // Aparece sólo al tener sesión
+              <Button
+                startIcon={<EditIcon />}
+                onClick={handleEdit}
+                variant="outlined"
+              >
+                Editar
+              </Button>
+            )}
+
           <Tooltip title="Reportar contenido incorrecto">
             <Button
               startIcon={<FlagIcon />}
@@ -116,6 +139,7 @@ export default function PostPage({ params }) {
               Reportar
             </Button>
           </Tooltip>
+          </Box>
         </Box>
 
         <Card>
