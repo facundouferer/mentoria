@@ -13,12 +13,14 @@ import {
   InputBase,
   alpha,
 } from "@mui/material";
+import LogoutIcon from "@mui/icons-material/Logout";
 import MenuIcon from "@mui/icons-material/Menu";
 import SearchIcon from "@mui/icons-material/Search";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import ThemeToggle from "./ThemeToggle";
 import Image from "next/image";
+import { useSession, signOut } from "next-auth/react";
 
 const pages = [
   { title: "Inicio", path: "/" },
@@ -31,6 +33,7 @@ export default function Navbar({ mode, toggleColorMode }) {
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const router = useRouter();
+  const { data: session } = useSession();
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -70,9 +73,9 @@ export default function Navbar({ mode, toggleColorMode }) {
         <Toolbar
           disableGutters
           sx={{
-            height: "100%", // Full height to match the AppBar
-            display: "flex", // Ensure it's a flex container
-            alignItems: "center", // Center items vertically
+            height: "100%", 
+            display: "flex", 
+            alignItems: "center",
           }}
         >
           <Link href="/">
@@ -85,6 +88,7 @@ export default function Navbar({ mode, toggleColorMode }) {
               priority
             />
           </Link>
+
 
           {/* Mobile menu */}
           <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
@@ -126,6 +130,7 @@ export default function Navbar({ mode, toggleColorMode }) {
               ))}
             </Menu>
           </Box>
+
 
           {/* Desktop menu */}
           <Box
@@ -190,6 +195,18 @@ export default function Navbar({ mode, toggleColorMode }) {
               />
             </Box>
           </Box>
+
+          {/* Botón para cerrar sesión */}
+          {session?.user && (
+            <Button
+              color="white"
+              size="large"
+              startIcon={<LogoutIcon />}
+              onClick={() => signOut()}
+            ></Button>
+          )}
+
+
           {/* Theme Toggle */}
           <ThemeToggle mode={mode} toggleColorMode={toggleColorMode} />
         </Toolbar>

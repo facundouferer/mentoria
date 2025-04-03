@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState, useRef, use } from "react";
+import { useEffect, useState, use } from "react";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import {
@@ -131,6 +131,8 @@ export default function EditPostPage(props) {
     }
   };
 
+
+  // Barra de carga
   if (loading)
     return (
       <Box
@@ -156,6 +158,8 @@ export default function EditPostPage(props) {
         fullWidth
         margin="normal"
       />
+
+      {/* Bajada y desarrollo */}
       <h2 className="text-2xl font-semibold">Bajada</h2>
       <Paper variant="outlined" sx={{ padding: "10px", marginTop: "10px" }}>
         {bajadaEditor && <EditorContent editor={bajadaEditor} />}
@@ -164,6 +168,8 @@ export default function EditPostPage(props) {
       <Paper variant="outlined" sx={{ padding: "10px", marginTop: "10px" }}>
         {desarrolloEditor && <EditorContent editor={desarrolloEditor} />}
       </Paper>
+
+      {/* Preguntas */}
       <TextField
         label="Preguntas"
         value={questions}
@@ -173,6 +179,8 @@ export default function EditPostPage(props) {
         multiline
         rows={4}
       />
+
+      {/* Botones */}
       <Box sx={{ display: "flex", justifyContent: "space-between", mt: 2 }}>
         <Button variant="contained" color="primary" onClick={handleUpdate}>
           Actualizar
@@ -190,6 +198,7 @@ export default function EditPostPage(props) {
         </Button>
       </Box>
 
+      {/* Vista Previa */}
       {showPreview && post?.desarrollo && (
         <Paper sx={{ mt: 3, p: 2 }}>
           <Typography variant="h5" component="h2" gutterBottom>

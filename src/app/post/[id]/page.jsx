@@ -53,7 +53,7 @@ export default function PostPage(props) {
 
   // Editar artículo
   const handleEdit = () => {
-    router.push(`/post/${params.id}/edit`); // Navigate to edit page
+    router.push(`/post/${params.id}/edit`); // Redireccionar a la ruta de edición
   };
 
 
@@ -118,7 +118,7 @@ export default function PostPage(props) {
           </Button>
 
           <Box sx={{ display: "flex", gap:2}}>
-            {session?.user && post?.userId === session?.user?.id && ( // Aparece sólo al tener sesión
+            {session?.user && ( // Aparece sólo al tener sesión
               <Button
                 startIcon={<EditIcon />}
                 onClick={handleEdit}
