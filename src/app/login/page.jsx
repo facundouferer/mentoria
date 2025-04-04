@@ -25,7 +25,7 @@ export default function Home() {
     return (
       <Container
         maxWidth="sm"
-        sx={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "100vh" }}
+        sx={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "40vh" }}
       >
         <Paper elevation={3} sx={{ padding: 4, display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
           <Typography variant="h5" gutterBottom>
