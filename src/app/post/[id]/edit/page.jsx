@@ -1,83 +1,52 @@
 "use client";
-import { useEffect, useState, use } from "react";
-import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { useParams, useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import {
   Container,
   Button,
   Box,
   CircularProgress,
-  TextField,
   Typography,
   Paper,
 } from "@mui/material";
-import DeleteIcon from '@mui/icons-material/Delete';
-import { useEditor, EditorContent } from "@tiptap/react";
-import StarterKit from "@tiptap/starter-kit";
+import DeleteIcon from "@mui/icons-material/Delete";
+import TiptapEditor from "@/components/Tiptap";
 
-export default function EditPostPage(props) {
-  const params = use(props.params);
+export default function EditPostPage() {
+  const { id } = useParams();
   const [post, setPost] = useState(null);
   const [loading, setLoading] = useState(true);
   const [title, setTitle] = useState("");
   const [bajada, setBajada] = useState("");
+  const [desarrollo, setDesarrollo] = useState("");
   const [questions, setQuestions] = useState("");
   const [showPreview, setShowPreview] = useState(false);
 
   const router = useRouter();
   const { data: session } = useSession();
 
-  // Editor de texto enriquecido para el desarrollo
-  const desarrolloEditor = useEditor({
-    extensions: [StarterKit],
-    content: post?.desarrollo || "<p>Cargando...</p>",
-    immediatelyRender: false,
-    onUpdate: ({ editor }) => {
-      setPost({ ...post, desarrollo: editor.getHTML() });
-    },
-  });
-
-  // Editor de texto enriquecido para la bajada
-  const bajadaEditor = useEditor({
-    extensions: [StarterKit],
-    content: post?.bajada || "<p>Cargando...</p>",
-    immediatelyRender: false,
-    onUpdate: ({ editor }) => {
-      setPost({ ...post, bajada: editor.getHTML() });
-    },
-  });
-
   useEffect(() => {
     const fetchPost = async () => {
       try {
-        const response = await fetch(`/api/entries/${params.id}`);
-        const data = await response.json();
-        if (data.entry) {
-          setPost(data.entry);
-          setTitle(data.entry.titulo);
-          setBajada(data.entry.bajada);
-          setQuestions(data.entry.preguntas);
-        }
+        const res = await fetch(`/api/entries/${id}`);
+        const data = await res.json();
+        const entry = data.entry;
+        setPost(entry);
+        setTitle(entry.titulo);
+        setBajada(entry.bajada);
+        setDesarrollo(entry.desarrollo);
+        setQuestions(entry.preguntas);
         setLoading(false);
-      } catch (error) {
-        console.error("Error obteniendo el post:", error);
+      } catch (err) {
+        console.error("Error fetching post:", err);
         setLoading(false);
       }
     };
 
-    fetchPost();
-  }, [params.id]);
+    if (id) fetchPost();
+  }, [id]);
 
-  useEffect(() => {
-    if (desarrolloEditor && post?.desarrollo) {
-      desarrolloEditor.commands.setContent(post.desarrollo);
-    }
-    if (bajadaEditor && post?.bajada) {
-      bajadaEditor.commands.setContent(post.bajada);
-    }
-  }, [desarrolloEditor, post?.desarrollo, bajadaEditor, post?.bajada]);
-
-  // Handlers
   const handleUpdate = async () => {
     if (!session?.user || post?.userId !== session?.user?.id) {
       alert("No tienes permisos para modificar este post.");
@@ -85,21 +54,21 @@ export default function EditPostPage(props) {
     }
 
     try {
-      const response = await fetch(`/api/entries/${params.id}`, {
+      const response = await fetch(`/api/entries/${id}`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
           titulo: title,
-          bajada: post.bajada,
-          desarrollo: post.desarrollo,
+          bajada,
+          desarrollo,
           preguntas: questions,
         }),
       });
 
       if (response.ok) {
-        router.push(`/post/${params.id}`);
+        router.push(`/post/${id}`);
       } else {
         alert("Falló al actualizar el post.");
       }
@@ -116,7 +85,7 @@ export default function EditPostPage(props) {
 
     if (window.confirm("¿Está seguro de querer eliminarlo?")) {
       try {
-        const response = await fetch(`/api/entries/${params.id}`, {
+        const response = await fetch(`/api/entries/${id}`, {
           method: "DELETE",
         });
 
@@ -131,8 +100,6 @@ export default function EditPostPage(props) {
     }
   };
 
-
-  // Barra de carga
   if (loading)
     return (
       <Box
@@ -146,39 +113,38 @@ export default function EditPostPage(props) {
         <CircularProgress />
       </Box>
     );
+
   if (!post) return <div>Post no encontrado</div>;
 
   return (
-    // Título
     <Container maxWidth="md" sx={{ mt: 4 }} className="mb-4">
-      <TextField
-        label="Título"
-        value={title}
-        onChange={(e) => setTitle(e.target.value)}
-        fullWidth
-        margin="normal"
-      />
-
-      {/* Bajada y desarrollo */}
-      <h2 className="text-2xl font-semibold">Bajada</h2>
+      <Typography variant="h6" className="mb-2">
+        Título
+      </Typography>
       <Paper variant="outlined" sx={{ padding: "10px", marginTop: "10px" }}>
-        {bajadaEditor && <EditorContent editor={bajadaEditor} />}
-      </Paper>
-      <h2 className="text-2xl font-semibold">Desarrollo</h2>
-      <Paper variant="outlined" sx={{ padding: "10px", marginTop: "10px" }}>
-        {desarrolloEditor && <EditorContent editor={desarrolloEditor} />}
+        <TiptapEditor content={title} onChange={setTitle} />
       </Paper>
 
-      {/* Preguntas */}
-      <TextField
-        label="Preguntas"
-        value={questions}
-        onChange={(e) => setQuestions(e.target.value)}
-        fullWidth
-        margin="normal"
-        multiline
-        rows={4}
-      />
+      <Typography variant="h6" className="mt-4">
+        Bajada
+      </Typography>
+      <Paper variant="outlined" sx={{ padding: "10px", marginTop: "10px" }}>
+        <TiptapEditor content={bajada} onChange={setBajada} />
+      </Paper>
+
+      <Typography variant="h6" className="mt-4">
+        Desarrollo
+      </Typography>
+      <Paper variant="outlined" sx={{ padding: "10px", marginTop: "10px" }}>
+        <TiptapEditor content={desarrollo} onChange={setDesarrollo} />
+      </Paper>
+
+      <Typography variant="h6" className="mt-4">
+        Preguntas
+      </Typography>
+      <Paper variant="outlined" sx={{ padding: "10px", marginTop: "10px" }}>
+        <TiptapEditor content={questions} onChange={setQuestions} />
+      </Paper>
 
       {/* Botones */}
       <Box sx={{ display: "flex", justifyContent: "space-between", mt: 2 }}>
@@ -187,8 +153,8 @@ export default function EditPostPage(props) {
         </Button>
         <Button
           variant="outlined"
-          onClick={handleDelete}    
           color="error"
+          onClick={handleDelete}
           startIcon={<DeleteIcon />}
         >
           Borrar
@@ -199,18 +165,14 @@ export default function EditPostPage(props) {
       </Box>
 
       {/* Vista Previa */}
-      {showPreview && post?.desarrollo && (
+      {showPreview && (
         <Paper sx={{ mt: 3, p: 2 }}>
-          <Typography variant="h5" component="h2" gutterBottom>
-            {title}
-          </Typography>
+          <Typography variant="h5">{title}</Typography>
           <div dangerouslySetInnerHTML={{ __html: bajada }} />
-          <div dangerouslySetInnerHTML={{ __html: post.desarrollo }} />
+          <div dangerouslySetInnerHTML={{ __html: desarrollo }} />
           {questions && (
             <>
-              <Typography variant="h6" component="h3" gutterBottom>
-                Preguntas
-              </Typography>
+              <Typography variant="h6">Preguntas</Typography>
               <div dangerouslySetInnerHTML={{ __html: questions }} />
             </>
           )}
