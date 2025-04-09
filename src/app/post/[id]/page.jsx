@@ -141,7 +141,7 @@ export default function PostPage(props) {
           </Tooltip>
           </Box>
         </Box>
-
+{/* contenido */}
         <Card>
           <CardContent>
             <Typography variant="h4" component="h1" gutterBottom>

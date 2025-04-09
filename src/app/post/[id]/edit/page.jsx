@@ -7,17 +7,20 @@ import {
   Button,
   Box,
   CircularProgress,
+  TextField,
   Typography,
   Paper,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import TiptapEditor from "@/components/Tiptap";
+import Image from "next/image";
 
 export default function EditPostPage() {
   const { id } = useParams();
   const [post, setPost] = useState(null);
   const [loading, setLoading] = useState(true);
   const [title, setTitle] = useState("");
+  const [image, setImage] = useState("");
   const [bajada, setBajada] = useState("");
   const [desarrollo, setDesarrollo] = useState("");
   const [questions, setQuestions] = useState("");
@@ -34,6 +37,7 @@ export default function EditPostPage() {
         const entry = data.entry;
         setPost(entry);
         setTitle(entry.titulo);
+        setImage(entry.img_remota);
         setBajada(entry.bajada);
         setDesarrollo(entry.desarrollo);
         setQuestions(entry.preguntas);
@@ -61,6 +65,7 @@ export default function EditPostPage() {
         },
         body: JSON.stringify({
           titulo: title,
+          img_remota: image,
           bajada,
           desarrollo,
           preguntas: questions,
@@ -125,6 +130,16 @@ export default function EditPostPage() {
         <TiptapEditor content={title} onChange={setTitle} />
       </Paper>
 
+      <Typography variant="h6" className="mb-2">
+        Imagen
+      </Typography>
+      <TextField
+        variant="outlined"
+        fullWidth
+        value={image}
+        onChange={(e) => setImage(e.target.value)}
+      />
+
       <Typography variant="h6" className="mt-4">
         Bajada
       </Typography>
@@ -169,6 +184,13 @@ export default function EditPostPage() {
         <Paper sx={{ mt: 3, p: 2 }}>
           <Typography variant="h5">{title}</Typography>
           <div dangerouslySetInnerHTML={{ __html: bajada }} />
+          <Image
+            src={image}
+            alt="Imagen"
+            width={500}
+            height={300}
+            className="w-full h-auto object-cover"
+          />
           <div dangerouslySetInnerHTML={{ __html: desarrollo }} />
           {questions && (
             <>
