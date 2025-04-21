@@ -17,7 +17,7 @@ import {
 } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import FlagIcon from "@mui/icons-material/Flag";
-import EditIcon from '@mui/icons-material/Edit';
+import EditIcon from "@mui/icons-material/Edit";
 import VoteButtons from "@/components/VoteButtons";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
@@ -33,7 +33,7 @@ export default function PostPage(props) {
     message: "",
     severity: "success",
   });
-  const {data: session} = useSession(); // Obtener la sesión
+  const { data: session } = useSession(); // Obtener la sesión
   const router = useRouter();
 
   useEffect(() => {
@@ -55,7 +55,6 @@ export default function PostPage(props) {
   const handleEdit = () => {
     router.push(`/post/${params.id}/edit`); // Redireccionar a la ruta de edición
   };
-
 
   // Reporte de artículo
   const handleReport = async () => {
@@ -113,11 +112,15 @@ export default function PostPage(props) {
     <>
       <Container maxWidth="lg" sx={{ py: 4 }}>
         <Box sx={{ display: "flex", justifyContent: "space-between", mb: 4 }}>
-          <Button component={Link} href="/" startIcon={<ArrowBackIcon />}>
+          <Button
+            component={Link}
+            href="/"
+            startIcon={<ArrowBackIcon props={{ post, handleReport }} />}
+          >
             Volver
           </Button>
 
-          <Box sx={{ display: "flex", gap:2}}>
+          <Box sx={{ display: "flex", gap: 2 }}>
             {session?.user && ( // Aparece sólo al tener sesión
               <Button
                 startIcon={<EditIcon />}
@@ -128,20 +131,12 @@ export default function PostPage(props) {
               </Button>
             )}
 
-          <Tooltip title="Reportar contenido incorrecto">
-            <Button
-              startIcon={<FlagIcon />}
-              onClick={handleReport}
-              color="warning"
-              variant="outlined"
-              hoverColor="warning"
-            >
-              Reportar
-            </Button>
-          </Tooltip>
+            <Tooltip title="Reportar contenido incorrecto">
+              <ReportButton props={{ handleReport, post }} />
+            </Tooltip>
           </Box>
         </Box>
-{/* contenido */}
+        {/* contenido */}
         <Card>
           <CardContent>
             <Typography variant="h4" component="h1" gutterBottom>
@@ -191,7 +186,6 @@ export default function PostPage(props) {
           </CardContent>
         </Card>
       </Container>
-      {/* <Footer /> */}
 
       <Snackbar
         open={snackbar.open}

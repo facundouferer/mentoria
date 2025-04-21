@@ -15,7 +15,7 @@ import {
   Box,
   CircularProgress,
 } from "@mui/material";
-import Banner from "../components/Banner";
+import Banner from "../components/UI/Banner";
 import CardArticulo from "../components/CardArticulo";
 import SortEntries from "@/components/SortEntries";
 
