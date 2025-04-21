@@ -22,6 +22,7 @@ import VoteButtons from "@/components/VoteButtons";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 // import Footer from "@/components/ui/Footer";
+import ReportButton from "@/components/ReportButton";
 
 export default function PostPage(props) {
   const params = use(props.params);
