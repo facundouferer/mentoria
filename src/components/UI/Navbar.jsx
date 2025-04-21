@@ -73,8 +73,8 @@ export default function Navbar({ mode, toggleColorMode }) {
         <Toolbar
           disableGutters
           sx={{
-            height: "100%", 
-            display: "flex", 
+            height: "100%",
+            display: "flex",
             alignItems: "center",
           }}
         >
@@ -82,13 +82,11 @@ export default function Navbar({ mode, toggleColorMode }) {
             <Image
               src="/imagenes-02.png"
               alt="Banner"
-              width={0}
-              height={0}
-              style={{ width: "100px", height: "auto" }}
+              width={100} // provide a valid width
+              height={60} // provide a valid height that reflects the image ratio
               priority
             />
           </Link>
-
 
           {/* Mobile menu */}
           <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
@@ -130,7 +128,6 @@ export default function Navbar({ mode, toggleColorMode }) {
               ))}
             </Menu>
           </Box>
-
 
           {/* Desktop menu */}
           <Box
@@ -205,7 +202,6 @@ export default function Navbar({ mode, toggleColorMode }) {
               onClick={() => signOut()}
             ></Button>
           )}
-
 
           {/* Theme Toggle */}
           <ThemeToggle mode={mode} toggleColorMode={toggleColorMode} />

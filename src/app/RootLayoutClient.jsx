@@ -2,8 +2,8 @@
 import { useState, useEffect } from "react";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
+import Navbar from "@/components/UI/Navbar";
+import Footer from "@/components/UI/Footer";
 import { SessionProvider } from "next-auth/react"; // Import SessionProvider
 
 export default function RootLayoutClient({ children }) {
@@ -55,8 +55,6 @@ export default function RootLayoutClient({ children }) {
         <ThemeProvider theme={theme}>
           <CssBaseline />
           <SessionProvider>
-            {" "}
-            {/* Wrap your content with SessionProvider */}
             <Navbar mode={mode} toggleColorMode={toggleColorMode} />
             <main className="container mx-auto px-4">{children}</main>
             <Footer mode={mode} toggleColorMode={toggleColorMode} />
